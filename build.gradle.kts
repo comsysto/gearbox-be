@@ -32,6 +32,9 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation("org.springframework.security:spring-security-test")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
+    testImplementation("io.mockk:mockk:1.13.11")
+    testImplementation("org.mockito:mockito-junit-jupiter:3.3.3")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 

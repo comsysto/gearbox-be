@@ -15,11 +15,8 @@ class AuthenticationServiceImpl(private val userRepository: UserRepository) : Au
     }
 
     override fun signUp(authenticationSignUpCommand: AuthenticationSignUpCommand): User {
-        val passwordsDoNotMatch = authenticationSignUpCommand.password != authenticationSignUpCommand.confirmPassword
-        if (passwordsDoNotMatch) {
-            throw PasswordMismatchException("Passwords do not match")
-        }
-
+        validateUserDoesntExist(authenticationSignUpCommand)
+        validatePasswordMatching(authenticationSignUpCommand)
         validateBasicCredentials(authenticationSignUpCommand.email, authenticationSignUpCommand.password)
 
         val user = User(
@@ -45,6 +42,21 @@ class AuthenticationServiceImpl(private val userRepository: UserRepository) : Au
             throw PasswordPolicyViolationException(passwordResult.exceptionOrNull()!!.message!!)
         }
     }
+
+    private fun validateUserDoesntExist(command: AuthenticationSignUpCommand) {
+        val possibleUser = userRepository.findByEmailAndPassword(command.email, command.password)
+
+        if (possibleUser != null) {
+            throw UserAlreadyExistsException("User already exists.")
+        }
+    }
+
+    private fun validatePasswordMatching(command: AuthenticationSignUpCommand) {
+        val passwordsDoNotMatch = command.password != command.confirmPassword
+        if (passwordsDoNotMatch) {
+            throw PasswordMismatchException("Passwords do not match.")
+        }
+    }
 }
 
 private class CredentialsValidator {
@@ -55,7 +67,7 @@ private class CredentialsValidator {
         private const val ERR_LEN = "Password must have at least eight characters."
         private const val ERR_DIGIT = "Password must contain at least one digit."
         private const val ERR_UPPER = "Password must have at least one uppercase letter."
-        private const val ERR_SPECIAL = "Password must have at least one special character, such as: _%-=+#@"
+        private const val ERR_SPECIAL = "Password must have at least one special character, such as: _%-=+#@."
 
         fun validateEmail(email: String): Result<Unit> {
             return runCatching { require(email.matches(emailExpression)) { ERR_EMAIL } }

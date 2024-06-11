@@ -41,6 +41,8 @@ sealed class AuthenticationException(message: String) : Exception(message)
 
 class UserNotFoundException(message: String) : AuthenticationException(message)
 
+class UserAlreadyExistsException(message: String) : AuthenticationException(message)
+
 class InvalidEmailException(message: String) : AuthenticationException(message)
 
 class PasswordMismatchException(message: String) : AuthenticationException(message)
