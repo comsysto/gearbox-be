@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: gearbox_database
+    environment:
+      POSTGRES_USER: developer
+      POSTGRES_PASSWORD: comsystoreply
+      POSTGRES_DB: gearbox
+    ports:
+      - "5455:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
