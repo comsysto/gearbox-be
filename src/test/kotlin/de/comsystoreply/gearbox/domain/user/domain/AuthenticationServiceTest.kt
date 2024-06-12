@@ -1,6 +1,7 @@
-import de.comsystoreply.gearbox.domain.user.adapter.application.*
+package de.comsystoreply.gearbox.domain.user.domain
+
 import de.comsystoreply.gearbox.domain.user.model.User
-import de.comsystoreply.gearbox.domain.user.port.application.*
+import de.comsystoreply.gearbox.domain.user.port.api.*
 import de.comsystoreply.gearbox.domain.user.port.persistance.UserRepository
 import io.mockk.*
 import org.junit.jupiter.api.Assertions.*
@@ -8,15 +9,15 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-class AuthenticationServiceImplTest {
+class AuthenticationServiceTest {
 
     private lateinit var userRepository: UserRepository
-    private lateinit var authenticationService: AuthenticationServiceImpl
+    private lateinit var authenticationService: AuthenticationService
 
     @BeforeEach
     fun setUp() {
         userRepository = mockk()
-        authenticationService = AuthenticationServiceImpl(userRepository)
+        authenticationService = AuthenticationService(userRepository)
     }
 
     @Test

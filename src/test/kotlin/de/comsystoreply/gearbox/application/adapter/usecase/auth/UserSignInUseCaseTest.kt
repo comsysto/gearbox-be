@@ -1,9 +1,9 @@
-package de.comsystoreply.gearbox.bff.usecase.auth
+package de.comsystoreply.gearbox.application.adapter.usecase.auth
 
-import de.comsystoreply.gearbox.bff.dto.AuthenticationRequestDto
+import de.comsystoreply.gearbox.application.port.AuthenticationRequestDto
 import de.comsystoreply.gearbox.domain.user.model.User
-import de.comsystoreply.gearbox.domain.user.port.application.AuthenticationService
-import de.comsystoreply.gearbox.domain.user.port.application.UserNotFoundException
+import de.comsystoreply.gearbox.domain.user.port.api.AuthenticationApiFacade
+import de.comsystoreply.gearbox.domain.user.port.api.UserNotFoundException
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -15,12 +15,12 @@ import kotlin.test.assertEquals
 class UserSignInUseCaseTest {
 
     private lateinit var useCase: UserSignInUseCase
-    private lateinit var authenticationService: AuthenticationService
+    private lateinit var authenticationApiFacade: AuthenticationApiFacade
 
     @BeforeEach
     fun setUp() {
-        authenticationService = mockk()
-        useCase = UserSignInUseCase(authenticationService)
+        authenticationApiFacade = mockk()
+        useCase = UserSignInUseCase(authenticationApiFacade)
     }
 
     @Test
@@ -35,12 +35,12 @@ class UserSignInUseCaseTest {
                 profileImageUrl = null
             )
 
-        every { authenticationService.signIn(request.email, request.password) } returns expectedUser
+        every { authenticationApiFacade.signIn(request.email, request.password) } returns expectedUser
 
         val actualUser = useCase.execute(request)
 
         assertEquals(expectedUser, actualUser)
-        verify { authenticationService.signIn(request.email, request.password) }
+        verify { authenticationApiFacade.signIn(request.email, request.password) }
     }
 
     @Test
@@ -48,7 +48,7 @@ class UserSignInUseCaseTest {
         val request = AuthenticationRequestDto(email = "test@test.com", password = "test")
 
         every {
-            authenticationService.signIn(
+            authenticationApiFacade.signIn(
                 request.email,
                 request.password
             )
@@ -59,6 +59,6 @@ class UserSignInUseCaseTest {
         }
 
         assertEquals("User is not found", exception.message)
-        verify { authenticationService.signIn(request.email, request.password) }
+        verify { authenticationApiFacade.signIn(request.email, request.password) }
     }
 }

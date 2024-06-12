@@ -1,13 +1,13 @@
-package de.comsystoreply.gearbox.domain.user.adapter.application
+package de.comsystoreply.gearbox.domain.user.domain
 
 import de.comsystoreply.gearbox.domain.user.model.User
-import de.comsystoreply.gearbox.domain.user.port.application.*
+import de.comsystoreply.gearbox.domain.user.port.api.*
 import de.comsystoreply.gearbox.domain.user.port.persistance.UserRepository
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class AuthenticationServiceImpl(private val userRepository: UserRepository) : AuthenticationService {
+class AuthenticationService(private val userRepository: UserRepository) : AuthenticationApiFacade {
     override fun signIn(email: String, password: String): User {
         validateBasicCredentials(email, password)
         val user = userRepository.findByEmailAndPassword(email, password) ?: throw UserNotFoundException("User is not found")

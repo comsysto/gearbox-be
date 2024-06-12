@@ -1,4 +1,4 @@
-package de.comsystoreply.gearbox.config
+package de.comsystoreply.gearbox.bff.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

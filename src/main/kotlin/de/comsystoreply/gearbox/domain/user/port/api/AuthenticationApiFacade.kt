@@ -1,11 +1,11 @@
-package de.comsystoreply.gearbox.domain.user.port.application
+package de.comsystoreply.gearbox.domain.user.port.api
 
 import de.comsystoreply.gearbox.domain.user.model.User
 
 /**
  * Interface which when implemented, will provide email and password User authentication
  */
-interface AuthenticationService {
+interface AuthenticationApiFacade {
     /**
      * This function gets user credentials, validate them and return the User if it exists
      *

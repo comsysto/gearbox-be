@@ -1,7 +1,7 @@
-package de.comsystoreply.gearbox.domain.user.adapter.application
+package de.comsystoreply.gearbox.domain.user.domain
 
 import de.comsystoreply.gearbox.domain.user.model.User
-import de.comsystoreply.gearbox.domain.user.port.application.UserService
+import de.comsystoreply.gearbox.domain.user.port.api.UserApiFacade
 import de.comsystoreply.gearbox.domain.user.port.persistance.UserRepository
 import io.mockk.every
 import io.mockk.mockk
@@ -11,15 +11,15 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class UserServiceImplTest {
+class UserServiceTest {
 
-    private lateinit var userService: UserService
+    private lateinit var userApiFacade: UserApiFacade
     private lateinit var userRepository: UserRepository
 
     @BeforeEach
     fun setUp() {
         userRepository = mockk()
-        userService = UserServiceImpl(userRepository)
+        userApiFacade = UserService(userRepository)
     }
 
     @Test
@@ -31,7 +31,7 @@ class UserServiceImplTest {
 
         every { userRepository.findByEmailAndPassword(email, password) } returns expectedUser
 
-        val actualUser = userService.findByEmailAndPassword(email, password)
+        val actualUser = userApiFacade.findByEmailAndPassword(email, password)
 
         assertEquals(expectedUser, actualUser)
         verify { userRepository.findByEmailAndPassword(email, password) }
@@ -44,7 +44,7 @@ class UserServiceImplTest {
 
         every { userRepository.findByEmailAndPassword(email, password) } returns null
 
-        val actualUser = userService.findByEmailAndPassword(email, password)
+        val actualUser = userApiFacade.findByEmailAndPassword(email, password)
 
         assertNull(actualUser)
         verify { userRepository.findByEmailAndPassword(email, password) }

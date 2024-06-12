@@ -1,7 +1,7 @@
-package de.comsystoreply.gearbox.bff
+package de.comsystoreply.gearbox.bff.config
 
-import de.comsystoreply.gearbox.domain.user.port.application.AuthenticationException
-import de.comsystoreply.gearbox.domain.user.port.application.UserNotFoundException
+import de.comsystoreply.gearbox.domain.user.port.api.AuthenticationException
+import de.comsystoreply.gearbox.domain.user.port.api.UserNotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice

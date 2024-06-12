@@ -1,12 +1,11 @@
-package de.comsystoreply.gearbox.domain.user.port.application
+package de.comsystoreply.gearbox.domain.user.port.api
 
 import de.comsystoreply.gearbox.domain.user.model.User
-import org.springframework.data.jpa.repository.JpaRepository
 
 /**
- * User service interface which provides user search and fetching
+ * User API interface which provides user search and fetching
  */
-interface UserService {
+interface UserApiFacade {
     /**
      * @property [email] provided by user, must be valid email address
      * @property [password] provided by user
