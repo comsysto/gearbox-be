@@ -7,7 +7,7 @@ import de.comsystoreply.gearbox.domain.user.model.User
  */
 interface AuthenticationApiFacade {
     /**
-     * This function gets user credentials, validate them and return the User if it exists
+     * Function gets user credentials, validate them and return the User if it exists
      *
      * @property [email] must be valid email address
      * @property [password] must be at least 8 characters long with a number and a special character
@@ -18,7 +18,7 @@ interface AuthenticationApiFacade {
     fun signIn(email: String, password: String): User
 
     /**
-     * This function gets new user data, validate credentials, checks if user exists and returns the newly created User
+     * Function gets new user data, validate credentials, checks if user exists and returns the newly created User
      *
      * @property [authenticationSignUpCommand] custom model class which contains all data required for new user to be created
      * @return newly created User object
