@@ -1,6 +1,7 @@
 package de.comsystoreply.gearbox.application.adapter.usecase.auth
 
-import de.comsystoreply.gearbox.application.port.AuthenticationRequestDto
+import de.comsystoreply.gearbox.application.port.web.AuthenticationRequestDto
+import de.comsystoreply.gearbox.application.usecase.auth.UserSignInUseCase
 import de.comsystoreply.gearbox.domain.user.model.User
 import de.comsystoreply.gearbox.domain.user.port.api.AuthenticationApiFacade
 import de.comsystoreply.gearbox.domain.user.port.api.UserNotFoundException
