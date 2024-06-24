@@ -26,8 +26,7 @@ class UserServiceTest {
     fun `findByEmailAndPassword should return User when email and password combination exists`() {
         val email = "test@test.de"
         val password = "test"
-        val expectedUser =
-            User(id = "id", email = email, username = "testuser", password = password, profileImageUrl = null)
+        val expectedUser = User("id", email, "testuser", password, null)
 
         every { userRepository.findByEmailAndPassword(email, password) } returns expectedUser
 

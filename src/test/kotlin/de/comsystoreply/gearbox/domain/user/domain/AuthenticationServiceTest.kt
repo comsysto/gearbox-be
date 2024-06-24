@@ -24,8 +24,7 @@ class AuthenticationServiceTest {
     fun `signIn should return user when credentials are valid`() {
         val email = "test@example.com"
         val password = "ValidPass123!"
-        val expectedUser =
-            User(id = "id", email = email, username = "testuser", password = password, profileImageUrl = null)
+        val expectedUser = User("id", email, "testuser", password, null)
 
         every { userRepository.findByEmailAndPassword(email, password) } returns expectedUser
 

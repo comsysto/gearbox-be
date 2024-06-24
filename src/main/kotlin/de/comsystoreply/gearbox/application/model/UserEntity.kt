@@ -1,4 +1,4 @@
-package de.comsystoreply.gearbox.domain.user.model.persistance
+package de.comsystoreply.gearbox.application.model
 
 import de.comsystoreply.gearbox.domain.user.model.User
 import jakarta.persistence.*
