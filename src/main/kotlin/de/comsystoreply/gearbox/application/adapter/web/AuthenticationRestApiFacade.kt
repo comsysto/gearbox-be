@@ -1,10 +1,10 @@
-package de.comsystoreply.gearbox.application.adapter
+package de.comsystoreply.gearbox.application.adapter.web
 
 import de.comsystoreply.gearbox.application.port.web.AuthenticationRequestDto
 import de.comsystoreply.gearbox.application.port.web.AuthenticationResponseDto
 import de.comsystoreply.gearbox.application.port.web.AuthenticationWebFacade
-import de.comsystoreply.gearbox.application.usecase.auth.UserSignInUseCase
-import de.comsystoreply.gearbox.application.usecase.auth.UserSignUpUseCase
+import de.comsystoreply.gearbox.application.adapter.api.auth.UserSignInUseCase
+import de.comsystoreply.gearbox.application.adapter.api.auth.UserSignUpUseCase
 import org.springframework.stereotype.Service
 
 @Service

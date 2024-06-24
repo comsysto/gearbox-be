@@ -1,4 +1,4 @@
-package de.comsystoreply.gearbox.application.usecase.auth
+package de.comsystoreply.gearbox.application.adapter.api.auth
 
 import de.comsystoreply.gearbox.application.port.web.AuthenticationRequestDto
 import de.comsystoreply.gearbox.domain.user.model.User

@@ -1,4 +1,4 @@
-package de.comsystoreply.gearbox.bff.adapter
+package de.comsystoreply.gearbox.bff.adapter.web
 
 import de.comsystoreply.gearbox.application.port.web.AuthenticationRequestDto
 import de.comsystoreply.gearbox.application.port.web.AuthenticationResponseDto
