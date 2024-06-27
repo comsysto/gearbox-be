@@ -1,9 +1,9 @@
-package de.comsystoreply.gearbox.application.adapter.web
+package de.comsystoreply.gearbox.application.user.adapter.web
 
-import de.comsystoreply.gearbox.application.adapter.api.auth.UserSignInUseCase
-import de.comsystoreply.gearbox.application.adapter.api.auth.UserSignUpUseCase
-import de.comsystoreply.gearbox.application.port.web.AuthenticationRequestDto
-import de.comsystoreply.gearbox.application.port.web.AuthenticationResponseDto
+import de.comsystoreply.gearbox.application.user.adapter.api.auth.UserSignInUseCase
+import de.comsystoreply.gearbox.application.user.adapter.api.auth.UserSignUpUseCase
+import de.comsystoreply.gearbox.application.user.port.web.AuthenticationRequestDto
+import de.comsystoreply.gearbox.application.user.port.web.AuthenticationResponseDto
 import de.comsystoreply.gearbox.domain.user.model.User
 import de.comsystoreply.gearbox.domain.user.port.api.UserAlreadyExistsException
 import de.comsystoreply.gearbox.domain.user.port.api.UserNotFoundException

@@ -1,8 +1,8 @@
 package de.comsystoreply.gearbox.bff.adapter.web
 
-import de.comsystoreply.gearbox.application.port.web.AuthenticationRequestDto
-import de.comsystoreply.gearbox.application.port.web.AuthenticationResponseDto
-import de.comsystoreply.gearbox.application.port.web.AuthenticationWebFacade
+import de.comsystoreply.gearbox.application.user.port.web.AuthenticationRequestDto
+import de.comsystoreply.gearbox.application.user.port.web.AuthenticationResponseDto
+import de.comsystoreply.gearbox.application.user.port.web.AuthenticationWebFacade
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping

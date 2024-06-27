@@ -1,4 +1,4 @@
-package de.comsystoreply.gearbox.application.port.web
+package de.comsystoreply.gearbox.application.user.port.web
 
 import de.comsystoreply.gearbox.domain.user.model.User
 import de.comsystoreply.gearbox.domain.user.port.api.AuthenticationSignUpCommand

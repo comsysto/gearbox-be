@@ -1,7 +1,7 @@
-package de.comsystoreply.gearbox.application.adapter.persistence
+package de.comsystoreply.gearbox.application.user.adapter.persistence
 
 import de.comsystoreply.gearbox.domain.user.model.User
-import de.comsystoreply.gearbox.application.model.UserEntity
+import de.comsystoreply.gearbox.application.user.model.UserEntity
 import de.comsystoreply.gearbox.domain.user.port.persistance.UserRepository
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
