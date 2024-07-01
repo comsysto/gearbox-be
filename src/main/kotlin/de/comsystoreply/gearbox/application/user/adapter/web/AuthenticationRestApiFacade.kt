@@ -14,11 +14,11 @@ class AuthenticationRestApiFacade(
 ) : AuthenticationWebFacade {
     override fun signIn(authenticationRequestDto: AuthenticationRequestDto): AuthenticationResponseDto {
         val user = userSignInUseCase.execute(authenticationRequestDto)
-        return AuthenticationResponseDto("", user)
+        return AuthenticationResponseDto("", user.id, user.email, user.username, user.profileImageUrl)
     }
 
     override fun signUp(authenticationRequestDto: AuthenticationRequestDto): AuthenticationResponseDto {
         val user = userSignUpUseCase.execute(authenticationRequestDto)
-        return AuthenticationResponseDto("", user)
+        return AuthenticationResponseDto("", user.id, user.email, user.username, user.profileImageUrl)
     }
 }

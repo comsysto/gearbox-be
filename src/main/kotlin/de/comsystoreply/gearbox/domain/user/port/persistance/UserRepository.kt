@@ -1,7 +1,7 @@
 package de.comsystoreply.gearbox.domain.user.port.persistance
 
 import de.comsystoreply.gearbox.domain.user.model.User
-import org.springframework.data.jpa.repository.JpaRepository
+
 /**
  * Basic User repository which provides User domain object operations in the datasource
  */
@@ -12,11 +12,13 @@ interface UserRepository {
      * @return If exists, returns User else returns null
      */
     fun findByEmailAndPassword(email: String, password: String): User?
+
     /**
      * @property [user] new User object for creation
      * @return Returns the newly created User
      */
     fun create(user: User): User
+
     /**
      * @return A list of all users
      */

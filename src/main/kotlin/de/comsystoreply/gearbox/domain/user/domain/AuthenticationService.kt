@@ -8,23 +8,23 @@ import java.util.*
 
 @Service
 class AuthenticationService(private val userRepository: UserRepository) : AuthenticationApiFacade {
-    override fun signIn(email: String, password: String): User {
-        validateBasicCredentials(email, password)
-        val user = userRepository.findByEmailAndPassword(email, password) ?: throw UserNotFoundException("User is not found")
-        return user
+    override fun signIn(details: AuthenticationDetails): User {
+        validateBasicCredentials(details.email, details.password)
+        return userRepository.findByEmailAndPassword(details.email, details.password)
+            ?: throw UserNotFoundException("User is not found")
     }
 
-    override fun signUp(authenticationSignUpCommand: AuthenticationSignUpCommand): User {
-        validateUserDoesntExist(authenticationSignUpCommand)
-        validatePasswordMatching(authenticationSignUpCommand)
-        validateBasicCredentials(authenticationSignUpCommand.email, authenticationSignUpCommand.password)
+    override fun signUp(details: AuthenticationDetails): User {
+        validateUserDoesntExist(details)
+        validatePasswordMatching(details)
+        validateBasicCredentials(details.email, details.password)
 
         val user = User(
             id = UUID.randomUUID().toString(),
-            email = authenticationSignUpCommand.email,
-            username = authenticationSignUpCommand.username,
-            password = authenticationSignUpCommand.password,
-            profileImageUrl = authenticationSignUpCommand.profileImageUrl
+            email = details.email,
+            username = details.username!!,
+            password = details.password,
+            profileImageUrl = details.profileImageUrl
         )
 
         return userRepository.create(user)
@@ -43,7 +43,7 @@ class AuthenticationService(private val userRepository: UserRepository) : Authen
         }
     }
 
-    private fun validateUserDoesntExist(command: AuthenticationSignUpCommand) {
+    private fun validateUserDoesntExist(command: AuthenticationDetails) {
         val possibleUser = userRepository.findByEmailAndPassword(command.email, command.password)
 
         if (possibleUser != null) {
@@ -51,7 +51,7 @@ class AuthenticationService(private val userRepository: UserRepository) : Authen
         }
     }
 
-    private fun validatePasswordMatching(command: AuthenticationSignUpCommand) {
+    private fun validatePasswordMatching(command: AuthenticationDetails) {
         val passwordsDoNotMatch = command.password != command.confirmPassword
         if (passwordsDoNotMatch) {
             throw PasswordMismatchException("Passwords do not match.")

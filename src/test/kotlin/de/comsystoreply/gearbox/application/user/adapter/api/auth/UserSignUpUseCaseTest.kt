@@ -1,5 +1,6 @@
 package de.comsystoreply.gearbox.application.user.adapter.api.auth
 
+import de.comsystoreply.gearbox.application.user.model.UserEntity
 import de.comsystoreply.gearbox.application.user.port.web.AuthenticationRequestDto
 import de.comsystoreply.gearbox.domain.user.model.User
 import de.comsystoreply.gearbox.domain.user.port.api.AuthenticationApiFacade
@@ -32,9 +33,10 @@ class UserSignUpUseCaseTest {
             password = "ValidPass123!",
             confirmPassword = "ValidPass123!"
         )
-        val expectedUser = User("id", "test@example.com", "test", "ValidPass123!", null)
+        val domainUser = User("id", "test@example.com", "test", "ValidPass123!", null)
+        val expectedUser = UserEntity.fromDomain(domainUser)
 
-        every { authenticationApiFacade.signUp(any()) } returns expectedUser
+        every { authenticationApiFacade.signUp(any()) } returns domainUser
 
         val actualUser = userSignUpUseCase.execute(request)
 

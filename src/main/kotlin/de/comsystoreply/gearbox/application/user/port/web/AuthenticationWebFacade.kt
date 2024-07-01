@@ -1,7 +1,6 @@
 package de.comsystoreply.gearbox.application.user.port.web
 
-import de.comsystoreply.gearbox.domain.user.model.User
-import de.comsystoreply.gearbox.domain.user.port.api.AuthenticationSignUpCommand
+import de.comsystoreply.gearbox.domain.user.port.api.AuthenticationDetails
 
 /**
  * Interface which defines methods which expose Authentication features via REST API
@@ -13,6 +12,7 @@ interface AuthenticationWebFacade {
      * @return token and user if credentials are valid, else returns error message
      */
     fun signIn(authenticationRequestDto: AuthenticationRequestDto): AuthenticationResponseDto
+
     /**
      * Function gets sign up request from the user with credentials and returns token with created user data
      * @property [authenticationRequestDto] contains user credentials
@@ -27,9 +27,9 @@ data class AuthenticationRequestDto(
     val password: String,
     val confirmPassword: String? = null
 ) {
-    fun toDomain(profileImageUrl: String?) = AuthenticationSignUpCommand(
+    fun toDomain(profileImageUrl: String? = null) = AuthenticationDetails(
         email,
-        username!!,
+        username ?: "",
         password,
         confirmPassword,
         profileImageUrl
@@ -38,5 +38,8 @@ data class AuthenticationRequestDto(
 
 data class AuthenticationResponseDto(
     val token: String,
-    val user: User,
+    val id: String,
+    val email: String,
+    val username: String,
+    val profileImageUrl: String?
 )

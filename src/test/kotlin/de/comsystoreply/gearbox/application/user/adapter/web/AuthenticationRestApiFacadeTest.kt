@@ -2,9 +2,9 @@ package de.comsystoreply.gearbox.application.user.adapter.web
 
 import de.comsystoreply.gearbox.application.user.adapter.api.auth.UserSignInUseCase
 import de.comsystoreply.gearbox.application.user.adapter.api.auth.UserSignUpUseCase
+import de.comsystoreply.gearbox.application.user.model.UserEntity
 import de.comsystoreply.gearbox.application.user.port.web.AuthenticationRequestDto
 import de.comsystoreply.gearbox.application.user.port.web.AuthenticationResponseDto
-import de.comsystoreply.gearbox.domain.user.model.User
 import de.comsystoreply.gearbox.domain.user.port.api.UserAlreadyExistsException
 import de.comsystoreply.gearbox.domain.user.port.api.UserNotFoundException
 import io.mockk.every
@@ -33,10 +33,10 @@ class AuthenticationRestApiFacadeTest {
         val email = "test@example.com"
         val password = "ValidPass123!"
         val requestDto = AuthenticationRequestDto(email = email, password = password)
-        val expectedUser = User("id", email, "testuser", password, null)
-        val expectedResponse = AuthenticationResponseDto("", expectedUser)
+        val userEntity = UserEntity("id", email, "testuser", password, null)
+        val expectedResponse = AuthenticationResponseDto("", "id", email, "testuser", null)
 
-        every { userSignInUseCase.execute(requestDto) } returns expectedUser
+        every { userSignInUseCase.execute(requestDto) } returns userEntity
 
         val actualResponse = authenticationRestApiFacade.signIn(requestDto)
 
@@ -63,8 +63,8 @@ class AuthenticationRestApiFacadeTest {
         val email = "test@example.com"
         val password = "ValidPass123!"
         val requestDto = AuthenticationRequestDto(email = email, password = password)
-        val expectedUser = User("id", email, "testuser", password, null)
-        val expectedResponse = AuthenticationResponseDto("", expectedUser)
+        val expectedUser = UserEntity("id", email, "testuser", password, null)
+        val expectedResponse = AuthenticationResponseDto("", "id", email, "testuser", null)
 
         every { userSignUpUseCase.execute(requestDto) } returns expectedUser
 

@@ -24,11 +24,12 @@ class AuthenticationServiceTest {
     fun `signIn should return user when credentials are valid`() {
         val email = "test@example.com"
         val password = "ValidPass123!"
+        val details = AuthenticationDetails(email = email, password = password)
         val expectedUser = User("id", email, "testuser", password, null)
 
         every { userRepository.findByEmailAndPassword(email, password) } returns expectedUser
 
-        val actualUser = authenticationService.signIn(email, password)
+        val actualUser = authenticationService.signIn(details)
 
         assertEquals(expectedUser, actualUser)
         verify { userRepository.findByEmailAndPassword(email, password) }
@@ -38,11 +39,12 @@ class AuthenticationServiceTest {
     fun `signIn should throw UserNotFoundException when user is not found`() {
         val email = "test@example.com"
         val password = "ValidPass123!"
+        val details = AuthenticationDetails(email = email, password = password)
 
         every { userRepository.findByEmailAndPassword(email, password) } returns null
 
         val exception = assertThrows<UserNotFoundException> {
-            authenticationService.signIn(email, password)
+            authenticationService.signIn(details)
         }
 
         assertEquals("User is not found", exception.message)
@@ -51,7 +53,7 @@ class AuthenticationServiceTest {
 
     @Test
     fun `signUp should return user when credentials are valid`() {
-        val command = AuthenticationSignUpCommand(
+        val details = AuthenticationDetails(
             email = "test@example.com",
             username = "testuser",
             password = "ValidPass123!",
@@ -60,16 +62,16 @@ class AuthenticationServiceTest {
         )
         val expectedUser = User(
             id = "id",
-            email = command.email,
-            username = command.username,
-            password = command.password,
-            profileImageUrl = command.profileImageUrl
+            email = details.email,
+            username = details.username!!,
+            password = details.password,
+            profileImageUrl = details.profileImageUrl
         )
 
         every { userRepository.findByEmailAndPassword(any(), any()) } returns null
         every { userRepository.create(any()) } returns expectedUser
 
-        val actualUser = authenticationService.signUp(command)
+        val actualUser = authenticationService.signUp(details)
 
         assertEquals(expectedUser, actualUser)
         verify { userRepository.create(any()) }
@@ -77,7 +79,7 @@ class AuthenticationServiceTest {
 
     @Test
     fun `signUp should throw UserAlreadyExistsException when user exists`() {
-        val command = AuthenticationSignUpCommand(
+        val details = AuthenticationDetails(
             email = "test@example.com",
             username = "testuser",
             password = "ValidPass123!",
@@ -86,22 +88,22 @@ class AuthenticationServiceTest {
         )
         val existingUser = User(
             id = "id",
-            email = command.email,
-            username = command.username,
-            password = command.password,
-            profileImageUrl = command.profileImageUrl
+            email = details.email,
+            username = details.username!!,
+            password = details.password,
+            profileImageUrl = details.profileImageUrl
         )
 
         every { userRepository.findByEmailAndPassword(any(), any()) } returns existingUser
-        val exception = assertThrows<UserAlreadyExistsException> { authenticationService.signUp(command) }
+        val exception = assertThrows<UserAlreadyExistsException> { authenticationService.signUp(details) }
 
         assertEquals("User already exists.", exception.message)
-        verify { userRepository.findByEmailAndPassword(command.email, command.password) }
+        verify { userRepository.findByEmailAndPassword(details.email, details.password) }
     }
 
     @Test
     fun `signUp should throw PasswordMismatchException when passwords do not match`() {
-        val command = AuthenticationSignUpCommand(
+        val command = AuthenticationDetails(
             email = "test@example.com",
             username = "testuser",
             password = "ValidPass123!",
@@ -123,9 +125,10 @@ class AuthenticationServiceTest {
     fun `signIn should throw InvalidEmailException when email is invalid`() {
         val email = "invalid-email"
         val password = "ValidPass123!"
+        val details = AuthenticationDetails(email = email, password = password)
 
         val exception = assertThrows<InvalidEmailException> {
-            authenticationService.signIn(email, password)
+            authenticationService.signIn(details)
         }
 
         assertEquals("Invalid email address.", exception.message)
@@ -136,9 +139,10 @@ class AuthenticationServiceTest {
     fun `signIn should throw PasswordPolicyViolationException when password is too short`() {
         val email = "test@example.com"
         val password = "short"
+        val details = AuthenticationDetails(email = email, password = password)
 
         val exception = assertThrows<PasswordPolicyViolationException> {
-            authenticationService.signIn(email, password)
+            authenticationService.signIn(details)
         }
 
         assertEquals("Password must have at least eight characters.", exception.message)
@@ -149,9 +153,10 @@ class AuthenticationServiceTest {
     fun `signIn should throw PasswordPolicyViolationException when password does not contain any digit`() {
         val email = "test@example.com"
         val password = "password"
+        val details = AuthenticationDetails(email = email, password = password)
 
         val exception = assertThrows<PasswordPolicyViolationException> {
-            authenticationService.signIn(email, password)
+            authenticationService.signIn(details)
         }
 
         assertEquals("Password must contain at least one digit.", exception.message)
@@ -162,9 +167,10 @@ class AuthenticationServiceTest {
     fun `signIn should throw PasswordPolicyViolationException when password does not contain an uppercase letter`() {
         val email = "test@example.com"
         val password = "pa$\$w0rd"
+        val details = AuthenticationDetails(email = email, password = password)
 
         val exception = assertThrows<PasswordPolicyViolationException> {
-            authenticationService.signIn(email, password)
+            authenticationService.signIn(details)
         }
 
         assertEquals("Password must have at least one uppercase letter.", exception.message)
@@ -175,11 +181,12 @@ class AuthenticationServiceTest {
     fun `signIn should throw PasswordPolicyViolationException when password does not contain a special character`() {
         val email = "test@example.com"
         val password = "Passw0rd"
+        val details = AuthenticationDetails(email = email, password = password)
 
         every { userRepository.findByEmailAndPassword(any(), any()) } returns null
 
         val exception = assertThrows<PasswordPolicyViolationException> {
-            authenticationService.signIn(email, password)
+            authenticationService.signIn(details)
         }
 
         assertEquals("Password must have at least one special character, such as: _%-=+#@.", exception.message)
