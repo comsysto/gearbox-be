@@ -7,7 +7,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class UserService(private val userRepository: UserRepository) : UserApiFacade {
-    override fun findByEmailAndPassword(email: String, password: String): User? {
-        return userRepository.findByEmailAndPassword(email, password)
-    }
+    override fun findByEmailAndPassword(email: String, password: String): User? =
+        userRepository.findByEmailAndPassword(email, password)
+
+    override fun findByEmail(email: String): User? = userRepository.findByEmail(email)
 }

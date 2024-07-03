@@ -8,8 +8,10 @@ import java.util.*
 
 @Service
 class AuthenticationService(private val userRepository: UserRepository) : AuthenticationApiFacade {
+
     override fun signIn(details: AuthenticationDetails): User {
         validateBasicCredentials(details.email, details.password)
+
         return userRepository.findByEmailAndPassword(details.email, details.password)
             ?: throw UserNotFoundException("User is not found")
     }
@@ -43,16 +45,16 @@ class AuthenticationService(private val userRepository: UserRepository) : Authen
         }
     }
 
-    private fun validateUserDoesntExist(command: AuthenticationDetails) {
-        val possibleUser = userRepository.findByEmailAndPassword(command.email, command.password)
+    private fun validateUserDoesntExist(details: AuthenticationDetails) {
+        val possibleUser = userRepository.findByEmail(details.email)
 
         if (possibleUser != null) {
             throw UserAlreadyExistsException("User already exists.")
         }
     }
 
-    private fun validatePasswordMatching(command: AuthenticationDetails) {
-        val passwordsDoNotMatch = command.password != command.confirmPassword
+    private fun validatePasswordMatching(details: AuthenticationDetails) {
+        val passwordsDoNotMatch = details.password != details.confirmPassword
         if (passwordsDoNotMatch) {
             throw PasswordMismatchException("Passwords do not match.")
         }

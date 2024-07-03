@@ -12,4 +12,10 @@ interface UserApiFacade {
      * @return If exists, returns User, else returns null
      */
     fun findByEmailAndPassword(email: String, password: String): User?
+
+    /**
+     * @property [email] provided by user, must be valid email address
+     * @return If exists, returns User, else returns null
+     */
+    fun findByEmail(email: String): User?
 }

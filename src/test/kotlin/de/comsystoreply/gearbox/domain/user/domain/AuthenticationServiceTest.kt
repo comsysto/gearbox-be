@@ -68,7 +68,7 @@ class AuthenticationServiceTest {
             profileImageUrl = details.profileImageUrl
         )
 
-        every { userRepository.findByEmailAndPassword(any(), any()) } returns null
+        every { userRepository.findByEmail(any()) } returns null
         every { userRepository.create(any()) } returns expectedUser
 
         val actualUser = authenticationService.signUp(details)
@@ -94,11 +94,11 @@ class AuthenticationServiceTest {
             profileImageUrl = details.profileImageUrl
         )
 
-        every { userRepository.findByEmailAndPassword(any(), any()) } returns existingUser
+        every { userRepository.findByEmail(any()) } returns existingUser
         val exception = assertThrows<UserAlreadyExistsException> { authenticationService.signUp(details) }
 
         assertEquals("User already exists.", exception.message)
-        verify { userRepository.findByEmailAndPassword(details.email, details.password) }
+        verify { userRepository.findByEmail(any()) }
     }
 
     @Test
@@ -111,7 +111,7 @@ class AuthenticationServiceTest {
             profileImageUrl = null
         )
 
-        every { userRepository.findByEmailAndPassword(any(), any()) } returns null
+        every { userRepository.findByEmail(any()) } returns null
 
         val exception = assertThrows<PasswordMismatchException> {
             authenticationService.signUp(command)
@@ -132,7 +132,7 @@ class AuthenticationServiceTest {
         }
 
         assertEquals("Invalid email address.", exception.message)
-        verify(exactly = 0) { userRepository.findByEmailAndPassword(any(), any()) }
+        verify(exactly = 0) { userRepository.findByEmail(any()) }
     }
 
     @Test
@@ -146,7 +146,7 @@ class AuthenticationServiceTest {
         }
 
         assertEquals("Password must have at least eight characters.", exception.message)
-        verify(exactly = 0) { userRepository.findByEmailAndPassword(any(), any()) }
+        verify(exactly = 0) { userRepository.findByEmail(any()) }
     }
 
     @Test
@@ -160,7 +160,7 @@ class AuthenticationServiceTest {
         }
 
         assertEquals("Password must contain at least one digit.", exception.message)
-        verify(exactly = 0) { userRepository.findByEmailAndPassword(any(), any()) }
+        verify(exactly = 0) { userRepository.findByEmail(any()) }
     }
 
     @Test
@@ -174,7 +174,7 @@ class AuthenticationServiceTest {
         }
 
         assertEquals("Password must have at least one uppercase letter.", exception.message)
-        verify(exactly = 0) { userRepository.findByEmailAndPassword(any(), any()) }
+        verify(exactly = 0) { userRepository.findByEmail(any()) }
     }
 
     @Test
@@ -183,13 +183,13 @@ class AuthenticationServiceTest {
         val password = "Passw0rd"
         val details = AuthenticationDetails(email = email, password = password)
 
-        every { userRepository.findByEmailAndPassword(any(), any()) } returns null
+        every { userRepository.findByEmail(any()) } returns null
 
         val exception = assertThrows<PasswordPolicyViolationException> {
             authenticationService.signIn(details)
         }
 
         assertEquals("Password must have at least one special character, such as: _%-=+#@.", exception.message)
-        verify(exactly = 0) { userRepository.findByEmailAndPassword(any(), any()) }
+        verify(exactly = 0) { userRepository.findByEmail(any()) }
     }
 }
