@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: gearbox
+  datasource:
+    url: jdbc:postgresql://localhost:5455/gearbox
+    username: developer
+    password: comsystoreply
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+jwt:
+  key: ${JWT_KEY}
+  accessTokenExpiration: 86_400_000
+  refreshTokenExpiration: 604_800_000

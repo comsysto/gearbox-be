@@ -1,8 +1,6 @@
 package de.comsystoreply.gearbox.bff.adapter.web
 
-import de.comsystoreply.gearbox.application.user.port.web.AuthenticationRequestDto
-import de.comsystoreply.gearbox.application.user.port.web.AuthenticationResponseDto
-import de.comsystoreply.gearbox.application.user.port.web.AuthenticationWebFacade
+import de.comsystoreply.gearbox.application.user.port.web.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -24,6 +22,12 @@ class AuthenticationController(
     @PostMapping("/signUp")
     fun signUp(@RequestBody authenticationRequestDto: AuthenticationRequestDto): ResponseEntity<AuthenticationResponseDto> {
         val response = webFacade.signUp(authenticationRequestDto)
+        return ResponseEntity(response, HttpStatus.OK)
+    }
+
+    @PostMapping("/refreshToken")
+    fun refreshToken(@RequestBody request: RefreshTokenRequestDto): ResponseEntity<RefreshTokenResponseDto> {
+        val response = webFacade.refreshToken(request)
         return ResponseEntity(response, HttpStatus.OK)
     }
 }

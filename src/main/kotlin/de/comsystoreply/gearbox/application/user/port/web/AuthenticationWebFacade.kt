@@ -1,6 +1,6 @@
 package de.comsystoreply.gearbox.application.user.port.web
 
-import de.comsystoreply.gearbox.domain.user.port.api.AuthenticationDetails
+import de.comsystoreply.gearbox.domain.user.port.api.UserInputDetails
 
 /**
  * Interface which defines methods which expose Authentication features via REST API
@@ -8,17 +8,24 @@ import de.comsystoreply.gearbox.domain.user.port.api.AuthenticationDetails
 interface AuthenticationWebFacade {
     /**
      * Function gets sign in request from the user with credentials and returns token with user data if it exists
-     * @property [authenticationRequestDto] contains user credentials
+     * @property [request] contains user credentials
      * @return token and user if credentials are valid, else returns error message
      */
-    fun signIn(authenticationRequestDto: AuthenticationRequestDto): AuthenticationResponseDto
+    fun signIn(request: AuthenticationRequestDto): AuthenticationResponseDto
 
     /**
      * Function gets sign up request from the user with credentials and returns token with created user data
-     * @property [authenticationRequestDto] contains user credentials
+     * @property [request] contains user credentials
      * @return token and created user if credentials are valid and user doesn't exist yet, else returns error message
      */
-    fun signUp(authenticationRequestDto: AuthenticationRequestDto): AuthenticationResponseDto
+    fun signUp(request: AuthenticationRequestDto): AuthenticationResponseDto
+
+    /**
+     * Function gets refresh token request and returns new access token
+     * @property [request] contains old access token
+     * @return new access token along with refresh token, else returns error message
+     */
+    fun refreshToken(request: RefreshTokenRequestDto): RefreshTokenResponseDto
 }
 
 data class AuthenticationRequestDto(
@@ -27,7 +34,7 @@ data class AuthenticationRequestDto(
     val password: String,
     val confirmPassword: String? = null
 ) {
-    fun toDomain(profileImageUrl: String? = null) = AuthenticationDetails(
+    fun toDomain(profileImageUrl: String? = null) = UserInputDetails(
         email,
         username ?: "",
         password,
@@ -38,8 +45,20 @@ data class AuthenticationRequestDto(
 
 data class AuthenticationResponseDto(
     val token: String,
+    val refreshToken: String,
     val id: String,
     val email: String,
     val username: String,
     val profileImageUrl: String?
 )
+
+data class RefreshTokenRequestDto(val refreshToken: String)
+
+data class RefreshTokenResponseDto(
+    val token: String,
+    val refreshToken: String,
+)
+
+sealed class AuthenticationException(message: String) : Exception(message)
+
+class InvalidOrExpiredTokenException(message: String) : AuthenticationException(message)

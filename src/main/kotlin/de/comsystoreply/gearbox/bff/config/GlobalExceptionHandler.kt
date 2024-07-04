@@ -1,6 +1,6 @@
 package de.comsystoreply.gearbox.bff.config
 
-import de.comsystoreply.gearbox.domain.user.port.api.AuthenticationException
+import de.comsystoreply.gearbox.domain.user.port.api.UserException
 import de.comsystoreply.gearbox.domain.user.port.api.UserNotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -20,7 +20,7 @@ class GlobalExceptionHandler {
     }
 
     @ExceptionHandler
-    fun handleAuthenticationException(ex: AuthenticationException): ResponseEntity<ExceptionMessage> {
+    fun handleAuthenticationException(ex: UserException): ResponseEntity<ExceptionMessage> {
         val exceptionMessage = ExceptionMessage(
             message = ex.message,
         )

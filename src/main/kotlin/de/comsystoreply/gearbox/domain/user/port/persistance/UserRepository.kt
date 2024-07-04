@@ -2,6 +2,7 @@ package de.comsystoreply.gearbox.domain.user.port.persistance
 
 import de.comsystoreply.gearbox.domain.user.model.User
 
+
 /**
  * Basic User repository which provides User domain object operations in the datasource
  */
@@ -12,6 +13,13 @@ interface UserRepository {
      * @return If exists, returns User else returns null
      */
     fun findByEmailAndPassword(email: String, password: String): User?
+
+    /**
+     * @property [email] provided by user, must be valid email address
+     * @return If exists, returns User else returns null
+     */
+    fun findByEmail(email: String): User?
+
 
     /**
      * @property [user] new User object for creation
