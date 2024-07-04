@@ -3,8 +3,8 @@ package de.comsystoreply.gearbox.application.user.adapter.api.auth
 import de.comsystoreply.gearbox.application.user.model.UserEntity
 import de.comsystoreply.gearbox.application.user.port.web.AuthenticationRequestDto
 import de.comsystoreply.gearbox.domain.user.model.User
-import de.comsystoreply.gearbox.domain.user.port.api.AuthenticationApiFacade
 import de.comsystoreply.gearbox.domain.user.port.api.PasswordPolicyViolationException
+import de.comsystoreply.gearbox.domain.user.port.api.UserApiFacade
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -15,13 +15,13 @@ import org.junit.jupiter.api.assertThrows
 
 class UserSignInUseCaseTest {
 
-    private lateinit var authenticationApiFacade: AuthenticationApiFacade
+    private lateinit var userApiFacade: UserApiFacade
     private lateinit var userSignInUseCase: UserSignInUseCase
 
     @BeforeEach
     fun setUp() {
-        authenticationApiFacade = mockk()
-        userSignInUseCase = UserSignInUseCase(authenticationApiFacade)
+        userApiFacade = mockk()
+        userSignInUseCase = UserSignInUseCase(userApiFacade)
     }
 
     @Test
@@ -30,12 +30,12 @@ class UserSignInUseCaseTest {
         val domainUser = User("id", "test@example.com", "test", "ValidPass123!", null)
         val expectedUser = UserEntity.fromDomain(domainUser)
 
-        every { authenticationApiFacade.signIn(any()) } returns domainUser
+        every { userApiFacade.signIn(any()) } returns domainUser
 
         val actualUser = userSignInUseCase.execute(request)
 
         assertEquals(expectedUser, actualUser)
-        verify { authenticationApiFacade.signIn(any()) }
+        verify { userApiFacade.signIn(any()) }
     }
 
     @Test
@@ -43,7 +43,7 @@ class UserSignInUseCaseTest {
         val request = AuthenticationRequestDto(email = "test@example.com", password = "short")
 
         every {
-            authenticationApiFacade.signIn(any())
+            userApiFacade.signIn(any())
         } throws PasswordPolicyViolationException("Password must have at least eight characters.")
 
         val exception = assertThrows<PasswordPolicyViolationException> {

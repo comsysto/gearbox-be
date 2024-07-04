@@ -1,6 +1,6 @@
 package de.comsystoreply.gearbox.application.user.port.web
 
-import de.comsystoreply.gearbox.domain.user.port.api.AuthenticationDetails
+import de.comsystoreply.gearbox.domain.user.port.api.UserDetails
 
 /**
  * Interface which defines methods which expose Authentication features via REST API
@@ -19,6 +19,13 @@ interface AuthenticationWebFacade {
      * @return token and created user if credentials are valid and user doesn't exist yet, else returns error message
      */
     fun signUp(request: AuthenticationRequestDto): AuthenticationResponseDto
+
+    /**
+     * Function gets refresh token request and returns new access token
+     * @property [request] contains old access token
+     * @return new access token along with refresh token, else returns error message
+     */
+    fun refreshToken(request: RefreshTokenRequestDto): RefreshTokenResponseDto
 }
 
 data class AuthenticationRequestDto(
@@ -27,7 +34,7 @@ data class AuthenticationRequestDto(
     val password: String,
     val confirmPassword: String? = null
 ) {
-    fun toDomain(profileImageUrl: String? = null) = AuthenticationDetails(
+    fun toDomain(profileImageUrl: String? = null) = UserDetails(
         email,
         username ?: "",
         password,
@@ -38,8 +45,20 @@ data class AuthenticationRequestDto(
 
 data class AuthenticationResponseDto(
     val token: String,
+    val refreshToken: String,
     val id: String,
     val email: String,
     val username: String,
     val profileImageUrl: String?
 )
+
+data class RefreshTokenRequestDto(val refreshToken: String)
+
+data class RefreshTokenResponseDto(
+    val token: String,
+    val refreshToken: String,
+)
+
+sealed class AuthenticationException(message: String) : Exception(message)
+
+class InvalidOrExpiredTokenException(message: String) : AuthenticationException(message)

@@ -13,5 +13,5 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 jwt:
   key: ${JWT_KEY}
-  accessTokenExpiration: 3600000
-  refreshTokenExpiration: 86400000
+  accessTokenExpiration: 86_400_000
+  refreshTokenExpiration: 604_800_000

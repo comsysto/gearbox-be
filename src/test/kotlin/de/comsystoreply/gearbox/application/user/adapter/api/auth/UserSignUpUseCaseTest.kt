@@ -3,8 +3,8 @@ package de.comsystoreply.gearbox.application.user.adapter.api.auth
 import de.comsystoreply.gearbox.application.user.model.UserEntity
 import de.comsystoreply.gearbox.application.user.port.web.AuthenticationRequestDto
 import de.comsystoreply.gearbox.domain.user.model.User
-import de.comsystoreply.gearbox.domain.user.port.api.AuthenticationApiFacade
 import de.comsystoreply.gearbox.domain.user.port.api.PasswordPolicyViolationException
+import de.comsystoreply.gearbox.domain.user.port.api.UserApiFacade
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -16,13 +16,13 @@ import kotlin.test.assertEquals
 
 class UserSignUpUseCaseTest {
 
-    private lateinit var authenticationApiFacade: AuthenticationApiFacade
+    private lateinit var userApiFacade: UserApiFacade
     private lateinit var userSignUpUseCase: UserSignUpUseCase
 
     @BeforeEach
     fun setUp() {
-        authenticationApiFacade = mockk()
-        userSignUpUseCase = UserSignUpUseCase(authenticationApiFacade)
+        userApiFacade = mockk()
+        userSignUpUseCase = UserSignUpUseCase(userApiFacade)
     }
 
     @Test
@@ -36,12 +36,12 @@ class UserSignUpUseCaseTest {
         val domainUser = User("id", "test@example.com", "test", "ValidPass123!", null)
         val expectedUser = UserEntity.fromDomain(domainUser)
 
-        every { authenticationApiFacade.signUp(any()) } returns domainUser
+        every { userApiFacade.signUp(any()) } returns domainUser
 
         val actualUser = userSignUpUseCase.execute(request)
 
         assertEquals(expectedUser, actualUser)
-        verify { authenticationApiFacade.signUp(any()) }
+        verify { userApiFacade.signUp(any()) }
     }
 
     @Test
@@ -54,7 +54,7 @@ class UserSignUpUseCaseTest {
         )
 
         every {
-            authenticationApiFacade.signUp(any())
+            userApiFacade.signUp(any())
         } throws PasswordPolicyViolationException("Password must have at least eight characters.")
 
         val exception = assertThrows<PasswordPolicyViolationException> {

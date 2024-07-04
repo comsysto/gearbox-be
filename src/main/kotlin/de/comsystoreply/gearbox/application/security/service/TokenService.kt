@@ -1,7 +1,6 @@
 package de.comsystoreply.gearbox.application.security.service
 
 import de.comsystoreply.gearbox.application.security.config.JwtProperties
-import de.comsystoreply.gearbox.application.user.model.UserEntity
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
@@ -15,13 +14,13 @@ class TokenService(jwtProperties: JwtProperties) {
     private val secretKey = Keys.hmacShaKeyFor(jwtProperties.key.toByteArray())
 
     fun generate(
-        userDetails: UserEntity,
+        email: String,
         expirationDate: Date,
         additionalClaims: Map<String, Any> = emptyMap()
     ): String =
         Jwts.builder()
             .claims()
-            .subject(userDetails.username)
+            .subject(email)
             .issuedAt(Date(System.currentTimeMillis()))
             .expiration(expirationDate)
             .add(additionalClaims)
