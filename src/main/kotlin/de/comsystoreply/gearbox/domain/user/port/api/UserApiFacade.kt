@@ -30,7 +30,7 @@ interface UserApiFacade {
      * @throws PasswordPolicyViolationException if [details] password doesn't meet all password requirements
      * @throws UserNotFoundException if [details] contains credentials that doesn't match with any user
      */
-    fun signIn(details: UserDetails): User
+    fun signIn(details: UserInputDetails): User
 
     /**
      * Function gets new user data, validate credentials, checks if user exists and returns the newly created User
@@ -42,10 +42,10 @@ interface UserApiFacade {
      * @throws PasswordPolicyViolationException if [details] password doesn't meet all password requirements
      * @throws UserAlreadyExistsException if [details] match with the existing details in repository
      */
-    fun signUp(details: UserDetails): User
+    fun signUp(details: UserInputDetails): User
 }
 
-data class UserDetails(
+data class UserInputDetails(
     val email: String,
     val username: String? = null,
     val password: String,

@@ -1,6 +1,6 @@
 package de.comsystoreply.gearbox.application.user.port.web
 
-import de.comsystoreply.gearbox.domain.user.port.api.UserDetails
+import de.comsystoreply.gearbox.domain.user.port.api.UserInputDetails
 
 /**
  * Interface which defines methods which expose Authentication features via REST API
@@ -34,7 +34,7 @@ data class AuthenticationRequestDto(
     val password: String,
     val confirmPassword: String? = null
 ) {
-    fun toDomain(profileImageUrl: String? = null) = UserDetails(
+    fun toDomain(profileImageUrl: String? = null) = UserInputDetails(
         email,
         username ?: "",
         password,

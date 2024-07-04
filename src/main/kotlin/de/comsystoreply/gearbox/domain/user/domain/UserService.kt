@@ -15,14 +15,14 @@ class UserService(private val userRepository: UserRepository) : UserApiFacade {
     override fun findByEmail(email: String): User =
         userRepository.findByEmail(email) ?: throw UserNotFoundException("User is not found.")
 
-    override fun signIn(details: UserDetails): User {
+    override fun signIn(details: UserInputDetails): User {
         validateBasicCredentials(details.email, details.password)
 
         return userRepository.findByEmailAndPassword(details.email, details.password)
             ?: throw UserNotFoundException("User is not found.")
     }
 
-    override fun signUp(details: UserDetails): User {
+    override fun signUp(details: UserInputDetails): User {
         validateUserDoesntExist(details)
         validatePasswordMatching(details)
         validateBasicCredentials(details.email, details.password)
@@ -51,7 +51,7 @@ class UserService(private val userRepository: UserRepository) : UserApiFacade {
         }
     }
 
-    private fun validateUserDoesntExist(details: UserDetails) {
+    private fun validateUserDoesntExist(details: UserInputDetails) {
         val possibleUser = userRepository.findByEmail(details.email)
 
         if (possibleUser != null) {
@@ -59,7 +59,7 @@ class UserService(private val userRepository: UserRepository) : UserApiFacade {
         }
     }
 
-    private fun validatePasswordMatching(details: UserDetails) {
+    private fun validatePasswordMatching(details: UserInputDetails) {
         val passwordsDoNotMatch = details.password != details.confirmPassword
         if (passwordsDoNotMatch) {
             throw PasswordMismatchException("Passwords do not match.")

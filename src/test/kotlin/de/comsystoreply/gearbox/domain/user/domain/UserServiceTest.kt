@@ -55,7 +55,7 @@ class UserServiceTest {
     fun `signIn should return user when credentials are valid`() {
         val email = "test@example.com"
         val password = "ValidPass123!"
-        val details = UserDetails(email = email, password = password)
+        val details = UserInputDetails(email = email, password = password)
         val expectedUser = User("id", email, "testuser", password, null)
 
         every { userRepository.findByEmailAndPassword(email, password) } returns expectedUser
@@ -70,7 +70,7 @@ class UserServiceTest {
     fun `signIn should throw UserNotFoundException when user is not found`() {
         val email = "test@example.com"
         val password = "ValidPass123!"
-        val details = UserDetails(email = email, password = password)
+        val details = UserInputDetails(email = email, password = password)
 
         every { userRepository.findByEmailAndPassword(email, password) } returns null
 
@@ -84,7 +84,7 @@ class UserServiceTest {
 
     @Test
     fun `signUp should return user when credentials are valid`() {
-        val details = UserDetails(
+        val details = UserInputDetails(
             email = "test@example.com",
             username = "testuser",
             password = "ValidPass123!",
@@ -110,7 +110,7 @@ class UserServiceTest {
 
     @Test
     fun `signUp should throw UserAlreadyExistsException when user exists`() {
-        val details = UserDetails(
+        val details = UserInputDetails(
             email = "test@example.com",
             username = "testuser",
             password = "ValidPass123!",
@@ -134,7 +134,7 @@ class UserServiceTest {
 
     @Test
     fun `signUp should throw PasswordMismatchException when passwords do not match`() {
-        val command = UserDetails(
+        val command = UserInputDetails(
             email = "test@example.com",
             username = "testuser",
             password = "ValidPass123!",
@@ -156,7 +156,7 @@ class UserServiceTest {
     fun `signIn should throw InvalidEmailException when email is invalid`() {
         val email = "invalid-email"
         val password = "ValidPass123!"
-        val details = UserDetails(email = email, password = password)
+        val details = UserInputDetails(email = email, password = password)
 
         val exception = assertThrows<InvalidEmailException> {
             userService.signIn(details)
@@ -170,7 +170,7 @@ class UserServiceTest {
     fun `signIn should throw PasswordPolicyViolationException when password is too short`() {
         val email = "test@example.com"
         val password = "short"
-        val details = UserDetails(email = email, password = password)
+        val details = UserInputDetails(email = email, password = password)
 
         val exception = assertThrows<PasswordPolicyViolationException> {
             userService.signIn(details)
@@ -184,7 +184,7 @@ class UserServiceTest {
     fun `signIn should throw PasswordPolicyViolationException when password does not contain any digit`() {
         val email = "test@example.com"
         val password = "password"
-        val details = UserDetails(email = email, password = password)
+        val details = UserInputDetails(email = email, password = password)
 
         val exception = assertThrows<PasswordPolicyViolationException> {
             userService.signIn(details)
@@ -198,7 +198,7 @@ class UserServiceTest {
     fun `signIn should throw PasswordPolicyViolationException when password does not contain an uppercase letter`() {
         val email = "test@example.com"
         val password = "pa$\$w0rd"
-        val details = UserDetails(email = email, password = password)
+        val details = UserInputDetails(email = email, password = password)
 
         val exception = assertThrows<PasswordPolicyViolationException> {
             userService.signIn(details)
@@ -212,7 +212,7 @@ class UserServiceTest {
     fun `signIn should throw PasswordPolicyViolationException when password does not contain a special character`() {
         val email = "test@example.com"
         val password = "Passw0rd"
-        val details = UserDetails(email = email, password = password)
+        val details = UserInputDetails(email = email, password = password)
 
         every { userRepository.findByEmail(any()) } returns null
 
