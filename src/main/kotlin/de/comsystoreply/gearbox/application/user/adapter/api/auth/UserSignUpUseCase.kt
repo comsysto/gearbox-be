@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component
 @Component
 class UserSignUpUseCase(private val userApi: UserApiFacade) {
     fun execute(request: AuthenticationRequestDto): UserEntity {
-        // TODO: Save image
         return UserEntity.fromDomain(userApi.signUp(request.toDomain()))
     }
 }
