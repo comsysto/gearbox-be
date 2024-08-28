@@ -20,6 +20,11 @@ interface UserRepository {
      */
     fun findByEmail(email: String): User?
 
+    /**
+     * @property [username] provided by user, simple String
+     * @return If exists, returns User else returns null
+     */
+    fun findByUsername(username: String): User?
 
     /**
      * @property [user] new User object for creation

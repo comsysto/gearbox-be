@@ -24,6 +24,10 @@ class JpaUserRepository(
         return jpaUserEntityRepository.findByEmail(email)?.toDomain()
     }
 
+    override fun findByUsername(username: String): User? {
+        return jpaUserEntityRepository.findByUsername(username)?.toDomain()
+    }
+
     override fun create(user: User): User {
         val entity = UserEntity.fromDomain(user)
         val encoded = entity.copy(password = encoder.encode(user.password))
@@ -35,4 +39,5 @@ class JpaUserRepository(
 
 interface JpaUserEntityRepository : JpaRepository<UserEntity, Long> {
     fun findByEmail(email: String): UserEntity?
+    fun findByUsername(username: String): UserEntity?
 }

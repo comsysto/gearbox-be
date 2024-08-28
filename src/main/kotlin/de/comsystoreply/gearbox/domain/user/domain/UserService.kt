@@ -52,9 +52,10 @@ class UserService(private val userRepository: UserRepository) : UserApiFacade {
     }
 
     private fun validateUserDoesntExist(details: UserInputDetails) {
-        val possibleUser = userRepository.findByEmail(details.email)
+        val userWithSameEmail = userRepository.findByEmail(details.email)
+        val userWithSameUsername = userRepository.findByUsername(details.email)
 
-        if (possibleUser != null) {
+        if (userWithSameEmail != null || userWithSameUsername != null) {
             throw UserAlreadyExistsException("User already exists.")
         }
     }

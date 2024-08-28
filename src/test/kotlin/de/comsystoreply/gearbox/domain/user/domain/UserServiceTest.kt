@@ -83,76 +83,6 @@ class UserServiceTest {
     }
 
     @Test
-    fun `signUp should return user when credentials are valid`() {
-        val details = UserInputDetails(
-            email = "test@example.com",
-            username = "testuser",
-            password = "ValidPass123!",
-            confirmPassword = "ValidPass123!",
-            profileImageUrl = null
-        )
-        val expectedUser = User(
-            id = "id",
-            email = details.email,
-            username = details.username!!,
-            password = details.password,
-            profileImageUrl = details.profileImageUrl
-        )
-
-        every { userRepository.findByEmail(any()) } returns null
-        every { userRepository.create(any()) } returns expectedUser
-
-        val actualUser = userService.signUp(details)
-
-        assertEquals(expectedUser, actualUser)
-        verify { userRepository.create(any()) }
-    }
-
-    @Test
-    fun `signUp should throw UserAlreadyExistsException when user exists`() {
-        val details = UserInputDetails(
-            email = "test@example.com",
-            username = "testuser",
-            password = "ValidPass123!",
-            confirmPassword = "ValidPass123!",
-            profileImageUrl = null
-        )
-        val existingUser = User(
-            id = "id",
-            email = details.email,
-            username = details.username!!,
-            password = details.password,
-            profileImageUrl = details.profileImageUrl
-        )
-
-        every { userRepository.findByEmail(any()) } returns existingUser
-        val exception = assertThrows<UserAlreadyExistsException> { userService.signUp(details) }
-
-        assertEquals("User already exists.", exception.message)
-        verify { userRepository.findByEmail(any()) }
-    }
-
-    @Test
-    fun `signUp should throw PasswordMismatchException when passwords do not match`() {
-        val command = UserInputDetails(
-            email = "test@example.com",
-            username = "testuser",
-            password = "ValidPass123!",
-            confirmPassword = "InvalidPass123!",
-            profileImageUrl = null
-        )
-
-        every { userRepository.findByEmail(any()) } returns null
-
-        val exception = assertThrows<PasswordMismatchException> {
-            userService.signUp(command)
-        }
-
-        assertEquals("Passwords do not match.", exception.message)
-        verify(exactly = 0) { userRepository.create(any()) }
-    }
-
-    @Test
     fun `signIn should throw InvalidEmailException when email is invalid`() {
         val email = "invalid-email"
         val password = "ValidPass123!"
@@ -222,5 +152,107 @@ class UserServiceTest {
 
         assertEquals("Password must have at least one special character, such as: _%-=+#@.", exception.message)
         verify(exactly = 0) { userRepository.findByEmail(any()) }
+    }
+
+    @Test
+    fun `signUp should return user when credentials are valid`() {
+        val details = UserInputDetails(
+            email = "test@example.com",
+            username = "testuser",
+            password = "ValidPass123!",
+            confirmPassword = "ValidPass123!",
+            profileImageUrl = null
+        )
+        val expectedUser = User(
+            id = "id",
+            email = details.email,
+            username = details.username!!,
+            password = details.password,
+            profileImageUrl = details.profileImageUrl
+        )
+
+        every { userRepository.findByEmail(any()) } returns null
+        every { userRepository.findByUsername(any()) } returns null
+        every { userRepository.create(any()) } returns expectedUser
+
+        val actualUser = userService.signUp(details)
+
+        assertEquals(expectedUser, actualUser)
+        verify { userRepository.findByEmail(any()) }
+        verify { userRepository.findByUsername(any()) }
+        verify { userRepository.create(any()) }
+    }
+
+    @Test
+    fun `signUp should throw UserAlreadyExistsException when user with same email exists`() {
+        val details = UserInputDetails(
+            email = "test@example.com",
+            username = "testuser",
+            password = "ValidPass123!",
+            confirmPassword = "ValidPass123!",
+            profileImageUrl = null
+        )
+        val existingUser = User(
+            id = "id",
+            email = details.email,
+            username = details.username!!,
+            password = details.password,
+            profileImageUrl = details.profileImageUrl
+        )
+
+        every { userRepository.findByEmail(any()) } returns existingUser
+        every { userRepository.findByUsername(any()) } returns null
+        val exception = assertThrows<UserAlreadyExistsException> { userService.signUp(details) }
+
+        assertEquals("User already exists.", exception.message)
+        verify { userRepository.findByEmail(any()) }
+        verify { userRepository.findByUsername(any()) }
+    }
+
+    @Test
+    fun `signUp should throw UserAlreadyExistsException when user with same username exists`() {
+        val details = UserInputDetails(
+            email = "test@example.com",
+            username = "testuser",
+            password = "ValidPass123!",
+            confirmPassword = "ValidPass123!",
+            profileImageUrl = null
+        )
+        val existingUser = User(
+            id = "id",
+            email = details.email,
+            username = details.username!!,
+            password = details.password,
+            profileImageUrl = details.profileImageUrl
+        )
+
+        every { userRepository.findByEmail(any()) } returns null
+        every { userRepository.findByUsername(any()) } returns existingUser
+        val exception = assertThrows<UserAlreadyExistsException> { userService.signUp(details) }
+
+        assertEquals("User already exists.", exception.message)
+        verify { userRepository.findByEmail(any()) }
+        verify { userRepository.findByUsername(any()) }
+    }
+
+    @Test
+    fun `signUp should throw PasswordMismatchException when passwords do not match`() {
+        val command = UserInputDetails(
+            email = "test@example.com",
+            username = "testuser",
+            password = "ValidPass123!",
+            confirmPassword = "InvalidPass123!",
+            profileImageUrl = null
+        )
+
+        every { userRepository.findByEmail(any()) } returns null
+        every { userRepository.findByUsername(any()) } returns null
+
+        val exception = assertThrows<PasswordMismatchException> {
+            userService.signUp(command)
+        }
+
+        assertEquals("Passwords do not match.", exception.message)
+        verify(exactly = 0) { userRepository.create(any()) }
     }
 }
