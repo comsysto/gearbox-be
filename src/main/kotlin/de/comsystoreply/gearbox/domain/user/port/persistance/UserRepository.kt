@@ -27,6 +27,12 @@ interface UserRepository {
     fun findByUsername(username: String): User?
 
     /**
+     * @property [id] provided by user, unique String
+     * @return If exists, returns User else returns null
+     */
+    fun findById(id: String): User?
+
+    /**
      * @property [user] new User object for creation
      * @return Returns the newly created User
      */

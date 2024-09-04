@@ -11,6 +11,9 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  sql:
+    init:
+      mode: embedded
 jwt:
   key: ${JWT_KEY}
   accessTokenExpiration: 86_400_000

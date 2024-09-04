@@ -1,4 +1,4 @@
-package de.comsystoreply.gearbox.domain.user.domain
+package de.comsystoreply.gearbox.domain.user.service
 
 import de.comsystoreply.gearbox.domain.user.model.User
 import de.comsystoreply.gearbox.domain.user.port.api.*
