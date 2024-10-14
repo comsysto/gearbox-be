@@ -9,6 +9,9 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.PageRequest
 import java.time.DayOfWeek
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -76,12 +79,18 @@ class BlogServiceTest {
         val startOfWeek = currentTime.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
         val endOfWeek = startOfWeek.plusWeeks(1)
 
+        val pageable = PageRequest.of(0, 10)
+
         val trendingBlogs = listOf(blog3, blog4)
-        every { blogRepository.findTrending(startOfWeek, endOfWeek) } returns trendingBlogs
+        val pageableTrendingList: Page<Blog> = PageImpl(trendingBlogs, pageable, trendingBlogs.size.toLong())
 
-        val actualBlogs = blogService.findTrending()
+        every { blogRepository.findTrending(startOfWeek, endOfWeek, pageable) } returns pageableTrendingList
 
-        assertEquals(trendingBlogs, actualBlogs)
-        verify { blogRepository.findTrending(startOfWeek, endOfWeek) }
+        val actualBlogs = blogService.findTrending(pageable)
+
+        assertEquals(pageableTrendingList, actualBlogs)
+        assertEquals(actualBlogs.size, 2)
+        assertEquals(actualBlogs.first().title, "The Future of Electric Vehicles")
+        verify { blogRepository.findTrending(startOfWeek, endOfWeek, pageable) }
     }
 }

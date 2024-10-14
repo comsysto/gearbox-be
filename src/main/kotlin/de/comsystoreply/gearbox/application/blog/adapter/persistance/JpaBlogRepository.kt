@@ -3,6 +3,8 @@ package de.comsystoreply.gearbox.application.blog.adapter.persistance
 import de.comsystoreply.gearbox.application.blog.model.BlogEntity
 import de.comsystoreply.gearbox.domain.blog.model.Blog
 import de.comsystoreply.gearbox.domain.blog.port.persistance.BlogRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
@@ -22,27 +24,31 @@ class JpaBlogRepository(
             ?.toDomain()
     }
 
-    override fun findTrending(startOfWeek: LocalDateTime, endOfWeek: LocalDateTime): List<Blog> {
+    override fun findTrending(
+        startOfWeek: LocalDateTime,
+        endOfWeek: LocalDateTime,
+        pageable: Pageable
+    ): Page<Blog> {
         return blogRepository
-            .findTop5TrendingBlogs(startOfWeek, endOfWeek)
+            .findTop5TrendingBlogs(startOfWeek, endOfWeek, pageable)
             .map { it.toDomain() }
     }
 
-    override fun findLatest(): List<Blog> {
+    override fun findLatest(pageable: Pageable): Page<Blog> {
         return blogRepository
-            .findLatestBlogs()
+            .findLatestBlogs(pageable)
             .map { it.toDomain() }
     }
 
-    override fun findByAuthor(userId: String): List<Blog> {
+    override fun findByAuthor(userId: String, pageable: Pageable): Page<Blog> {
         return blogRepository
-            .findAllByUserId(userId)
+            .findAllByUserId(userId, pageable)
             .map { it.toDomain() }
     }
 
-    override fun findLikedBy(userId: String): List<Blog> {
+    override fun findLikedBy(userId: String, pageable: Pageable): Page<Blog> {
         return blogRepository
-            .findLikedBy(userId)
+            .findLikedBy(userId, pageable)
             .map { it.toDomain() }
     }
 
@@ -50,9 +56,9 @@ class JpaBlogRepository(
         return blogRepository.findBlogLikedBy(blogId, userId) != null
     }
 
-    override fun search(query: String): List<Blog> {
+    override fun search(query: String, pageable: Pageable): Page<Blog> {
         return blogRepository
-            .findAllByTitleContainingIgnoreCase(query)
+            .findAllByTitleContainingIgnoreCase(query, pageable)
             .map { it.toDomain() }
     }
 
@@ -70,24 +76,23 @@ interface JpaBlogEntityRepository : JpaRepository<BlogEntity, String> {
         where b.create_date >= :startOfWeek
         and b.create_date < :endOfWeek
         order by b.number_of_likes desc
-        limit 5
         """, nativeQuery = true
     )
     fun findTop5TrendingBlogs(
         @Param("startOfWeek") startOfWeek: LocalDateTime,
-        @Param("endOfWeek") endOfWeek: LocalDateTime
-    ): List<BlogEntity>
+        @Param("endOfWeek") endOfWeek: LocalDateTime,
+        pageable: Pageable
+    ): Page<BlogEntity>
 
     @Query(
         """
-        select b from BlogEntity b
-        order by b.createDate desc
-        limit 20
-        """
+        select * from blog b
+        order by b.create_date desc
+        """, nativeQuery = true
     )
-    fun findLatestBlogs(): List<BlogEntity>
+    fun findLatestBlogs(pageable: Pageable): Page<BlogEntity>
 
-    fun findAllByUserId(userId: String): List<BlogEntity>
+    fun findAllByUserId(userId: String, pageable: Pageable): Page<BlogEntity>
 
     @Query(
         """
@@ -96,9 +101,9 @@ interface JpaBlogEntityRepository : JpaRepository<BlogEntity, String> {
         where bl.user_id = :userId
         """, nativeQuery = true
     )
-    fun findLikedBy(@Param("userId") userId: String): List<BlogEntity>
+    fun findLikedBy(@Param("userId") userId: String, pageable: Pageable): Page<BlogEntity>
 
-    fun findAllByTitleContainingIgnoreCase(query: String): List<BlogEntity>
+    fun findAllByTitleContainingIgnoreCase(query: String, pageable: Pageable): Page<BlogEntity>
 
     @Query(
         """

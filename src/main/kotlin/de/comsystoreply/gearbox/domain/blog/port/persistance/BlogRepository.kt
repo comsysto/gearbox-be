@@ -1,6 +1,8 @@
 package de.comsystoreply.gearbox.domain.blog.port.persistance
 
 import de.comsystoreply.gearbox.domain.blog.model.Blog
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import java.time.LocalDateTime
 
 /**
@@ -17,26 +19,30 @@ interface BlogRepository {
     /**
      * @property [startOfWeek] the date of start of the week for which to find trending blogs
      * @property [endOfWeek] the date of end of the week for which to find trending blogs
+     * @property [pageable] defines which page and size should return
      * @return A list of trending Blog objects within the specified time frame
      */
-    fun findTrending(startOfWeek: LocalDateTime, endOfWeek: LocalDateTime): List<Blog>
+    fun findTrending(startOfWeek: LocalDateTime, endOfWeek: LocalDateTime, pageable: Pageable): Page<Blog>
 
     /**
+     * @property [pageable] defines which page and size should return
      * @return A list of the latest Blog objects, ordered by creation date
      */
-    fun findLatest(): List<Blog>
+    fun findLatest(pageable: Pageable): Page<Blog>
 
     /**
      * @property [userId] unique identifier of the author (User)
+     * @property [pageable] defines which page and size should return
      * @return A list of Blog objects authored by the specified user
      */
-    fun findByAuthor(userId: String): List<Blog>
+    fun findByAuthor(userId: String, pageable: Pageable): Page<Blog>
 
     /**
      * @property [userId] unique identifier of the user
+     * @property [pageable] defines which page and size should return
      * @return A list of Blog objects liked by the specified user
      */
-    fun findLikedBy(userId: String): List<Blog>
+    fun findLikedBy(userId: String, pageable: Pageable): Page<Blog>
 
     /**
      * @property [blogId] unique identifier of the Blog
@@ -47,9 +53,10 @@ interface BlogRepository {
 
     /**
      * @property [query] a String used to search blogs based on title or content
+     * @property [pageable] defines which page and size should return
      * @return A list of Blog objects matching the search query
      */
-    fun search(query: String): List<Blog>
+    fun search(query: String, pageable: Pageable): Page<Blog>
 
     /**
      * @property [blogId] unique identifier of the Blog

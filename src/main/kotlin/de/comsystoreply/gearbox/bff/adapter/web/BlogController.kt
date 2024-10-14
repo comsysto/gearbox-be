@@ -4,6 +4,8 @@ import de.comsystoreply.gearbox.application.blog.port.web.BlogResponseDto
 import de.comsystoreply.gearbox.application.blog.port.web.BlogWebFacade
 import de.comsystoreply.gearbox.application.blog.port.web.LikeRequestDto
 import de.comsystoreply.gearbox.application.blog.port.web.SearchQueryDto
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -13,33 +15,46 @@ import org.springframework.web.bind.annotation.*
 class BlogController(
     private val webFacade: BlogWebFacade
 ) {
-    @GetMapping("/trending")
-    fun findTrending(): ResponseEntity<List<BlogResponseDto>> {
-        val response = webFacade.findTrending()
+    @GetMapping("/trending/{page}/{size}")
+    fun findTrending(@PathVariable page: Int, @PathVariable size: Int): ResponseEntity<Page<BlogResponseDto>> {
+        val pageRequest = PageRequest.of(page, size)
+        val response = webFacade.findTrending(pageRequest)
         return ResponseEntity(response, HttpStatus.OK)
     }
 
-    @GetMapping("/latest")
-    fun findLatest(): ResponseEntity<List<BlogResponseDto>> {
-        val response = webFacade.findLatest()
+    @GetMapping("/latest/{page}/{size}")
+    fun findLatest(@PathVariable page: Int, @PathVariable size: Int): ResponseEntity<Page<BlogResponseDto>> {
+        val pageRequest = PageRequest.of(page, size)
+        val response = webFacade.findLatest(pageRequest)
         return ResponseEntity(response, HttpStatus.OK)
     }
 
-    @GetMapping("/byAuthor/{userId}")
-    fun findByAuthorId(@PathVariable userId: String): ResponseEntity<List<BlogResponseDto>> {
-        val response = webFacade.findByAuthor(userId)
+    @GetMapping("/byAuthor/{userId}/{page}/{size}")
+    fun findByAuthorId(
+        @PathVariable userId: String,
+        @PathVariable page: Int,
+        @PathVariable size: Int
+    ): ResponseEntity<Page<BlogResponseDto>> {
+        val pageRequest = PageRequest.of(page, size)
+        val response = webFacade.findByAuthor(userId, pageRequest)
         return ResponseEntity(response, HttpStatus.OK)
     }
 
-    @GetMapping("/likedBy/{userId}")
-    fun findLikedBy(@PathVariable userId: String): ResponseEntity<List<BlogResponseDto>> {
-        val response = webFacade.findLikedBy(userId)
+    @GetMapping("/likedBy/{userId}/{page}/{size}")
+    fun findLikedBy(
+        @PathVariable userId: String,
+        @PathVariable page: Int,
+        @PathVariable size: Int
+    ): ResponseEntity<Page<BlogResponseDto>> {
+        val pageRequest = PageRequest.of(page, size)
+        val response = webFacade.findLikedBy(userId, pageRequest)
         return ResponseEntity(response, HttpStatus.OK)
     }
 
     @PostMapping("/search")
-    fun search(@RequestBody dto: SearchQueryDto): ResponseEntity<List<BlogResponseDto>> {
-        val response = webFacade.search(dto.query)
+    fun search(@RequestBody dto: SearchQueryDto): ResponseEntity<Page<BlogResponseDto>> {
+        val pageRequest = PageRequest.of(dto.page, dto.pageSize)
+        val response = webFacade.search(dto.query, pageRequest)
         return ResponseEntity(response, HttpStatus.OK)
     }
 

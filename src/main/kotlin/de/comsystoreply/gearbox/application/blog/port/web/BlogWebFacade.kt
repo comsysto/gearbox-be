@@ -1,6 +1,8 @@
 package de.comsystoreply.gearbox.application.blog.port.web
 
 import de.comsystoreply.gearbox.application.blog.model.BlogEntity
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import java.time.LocalDateTime
 
 /**
@@ -11,34 +13,34 @@ interface BlogWebFacade {
      * Function returns list of trending blogs
      * @return list of [BlogResponseDto]
      */
-    fun findTrending(): List<BlogResponseDto>
+    fun findTrending(pageable: Pageable): Page<BlogResponseDto>
 
     /**
      * Function returns list of latest blogs
      * @return list of [BlogResponseDto]
      */
-    fun findLatest(): List<BlogResponseDto>
+    fun findLatest(pageable: Pageable): Page<BlogResponseDto>
 
     /**
      * Function returns list of blogs whose author is user with given id
      * @property [userId] is user's unique identifier
      * @return list of [BlogResponseDto]
      */
-    fun findByAuthor(userId: String): List<BlogResponseDto>
+    fun findByAuthor(userId: String, pageable: Pageable): Page<BlogResponseDto>
 
     /**
      * Function returns list of blogs liked by user with given id
      * @property [userId] is user's unique identifier
      * @return list of [BlogResponseDto]
      */
-    fun findLikedBy(userId: String): List<BlogResponseDto>
+    fun findLikedBy(userId: String, pageable: Pageable): Page<BlogResponseDto>
 
     /**
      * Function returns list of blogs which
      * @property [query] simple search query
      * @return returns the list of [BlogResponseDto] that match the query
      */
-    fun search(query: String): List<BlogResponseDto>
+    fun search(query: String, pageable: Pageable): Page<BlogResponseDto>
 
     /**
      * @property [likeRequestDto] which contains blog unique identifier and user unique identifier
@@ -78,4 +80,4 @@ data class LikeRequestDto(
     val userId: String
 )
 
-data class SearchQueryDto(val query: String)
+data class SearchQueryDto(val query: String, val page: Int, val pageSize: Int)
