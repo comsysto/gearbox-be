@@ -26,7 +26,7 @@ class AuthenticationController(
     }
 
     @PostMapping("/refreshToken")
-    fun refreshToken(@RequestBody request: RefreshTokenRequestDto): ResponseEntity<RefreshTokenResponseDto> {
+    fun refreshToken(@RequestBody request: RefreshTokenRequestDto): ResponseEntity<AuthenticationResponseDto> {
         val response = webFacade.refreshToken(request)
         return ResponseEntity(response, HttpStatus.OK)
     }
