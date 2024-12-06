@@ -9,23 +9,26 @@ interface AuthenticationWebFacade {
     /**
      * Function gets sign in request from the user with credentials and returns token with user data if it exists
      * @property [request] contains user credentials
-     * @return token and user if credentials are valid, else returns error message
+     * @return token and user if credentials are valid
+     * @throws AuthenticationException on invalid sign in attempt
      */
     fun signIn(request: AuthenticationRequestDto): AuthenticationResponseDto
 
     /**
      * Function gets sign up request from the user with credentials and returns token with created user data
      * @property [request] contains user credentials
-     * @return token and created user if credentials are valid and user doesn't exist yet, else returns error message
+     * @return token and created user if credentials are valid and user doesn't exist yet
+     * @throws AuthenticationException on invalid sign up attempt
      */
     fun signUp(request: AuthenticationRequestDto): AuthenticationResponseDto
 
     /**
      * Function gets refresh token request and returns new access token
      * @property [request] contains old access token
-     * @return new access token along with refresh token, else returns error message
+     * @return user with new access token and refresh token
+     * @throws InvalidOrExpiredTokenException on invalid refresh token attempt
      */
-    fun refreshToken(request: RefreshTokenRequestDto): RefreshTokenResponseDto
+    fun refreshToken(request: RefreshTokenRequestDto): AuthenticationResponseDto
 }
 
 data class AuthenticationRequestDto(
@@ -53,11 +56,6 @@ data class AuthenticationResponseDto(
 )
 
 data class RefreshTokenRequestDto(val refreshToken: String)
-
-data class RefreshTokenResponseDto(
-    val token: String,
-    val refreshToken: String,
-)
 
 sealed class AuthenticationException(message: String) : Exception(message)
 
