@@ -22,6 +22,13 @@ interface UserApiFacade {
     fun findByEmail(email: String): User
 
     /**
+     * @property [id] must be existing user id
+     * @return returns User domain object
+     * @throws UserNotFoundException if user with given [id] is not found
+     */
+    fun findById(id: String): User
+
+    /**
      * Function gets user credentials, validate them and return the User if it exists
      *
      * @property [details] custom model class which contains email and password

@@ -14,9 +14,11 @@ class GetTokenOwnerUseCase(
 ) {
 
     fun execute(request: RefreshTokenRequestDto): UserEntity {
+        println("Request: $request")
         val extractedEmail = tokenService.extractEmail(request.refreshToken)
         val refreshTokenUser = refreshTokenRepository.findUserDetailsByToken(request.refreshToken)
 
+        println("refresh token user: $refreshTokenUser")
         if (refreshTokenUser == null || isTokenInvalidOrExpired(request.refreshToken, refreshTokenUser.email, extractedEmail)) {
             throw InvalidOrExpiredTokenException("Token is invalid or expired.")
         }
@@ -25,6 +27,8 @@ class GetTokenOwnerUseCase(
     }
 
     private fun isTokenInvalidOrExpired(refreshToken: String, userEmail: String, extractedEmail: String?): Boolean {
+        println("refreshToken: $refreshToken, userEmail: $userEmail, extractedEmail $extractedEmail")
+        println("Is expired: ${tokenService.isExpired(refreshToken)}")
         return tokenService.isExpired(refreshToken) && userEmail != extractedEmail
     }
 }

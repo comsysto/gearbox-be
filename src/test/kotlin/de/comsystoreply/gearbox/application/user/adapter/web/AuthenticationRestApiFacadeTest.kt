@@ -1,10 +1,7 @@
 package de.comsystoreply.gearbox.application.user.adapter.web
 
 import de.comsystoreply.gearbox.application.security.config.JwtProperties
-import de.comsystoreply.gearbox.application.security.repository.RefreshTokenRepository
-import de.comsystoreply.gearbox.application.security.service.TokenService
-import de.comsystoreply.gearbox.application.user.adapter.api.auth.UserSignInUseCase
-import de.comsystoreply.gearbox.application.user.adapter.api.auth.UserSignUpUseCase
+import de.comsystoreply.gearbox.application.user.adapter.api.auth.*
 import de.comsystoreply.gearbox.application.user.model.UserEntity
 import de.comsystoreply.gearbox.application.user.port.web.AuthenticationRequestDto
 import de.comsystoreply.gearbox.application.user.port.web.AuthenticationResponseDto
@@ -24,25 +21,23 @@ class AuthenticationRestApiFacadeTest {
 
     private lateinit var userSignInUseCase: UserSignInUseCase
     private lateinit var userSignUpUseCase: UserSignUpUseCase
+    private lateinit var generateTokenUseCase: GenerateTokenUseCase
+    private lateinit var getTokenOwnerUseCase: GetTokenOwnerUseCase
     private lateinit var authenticationRestApiFacade: AuthenticationRestApiFacade
-    private lateinit var tokenService: TokenService
-    private lateinit var jwtProperties: JwtProperties
-    private lateinit var refreshTokenRepository: RefreshTokenRepository
+
 
 
     @BeforeEach
     fun setUp() {
         userSignInUseCase = mockk()
         userSignUpUseCase = mockk()
-        tokenService = mockk()
-        jwtProperties = mockk()
-        refreshTokenRepository = mockk()
+        generateTokenUseCase = mockk()
+        getTokenOwnerUseCase = mockk()
         authenticationRestApiFacade = AuthenticationRestApiFacade(
             userSignInUseCase,
             userSignUpUseCase,
-            tokenService,
-            jwtProperties,
-            refreshTokenRepository,
+            generateTokenUseCase,
+            getTokenOwnerUseCase
         )
     }
 
@@ -55,17 +50,12 @@ class AuthenticationRestApiFacadeTest {
         val expectedResponse = AuthenticationResponseDto("token", "token", "id", email, "testuser", null)
 
         every { userSignInUseCase.execute(requestDto) } returns userEntity
-        every { jwtProperties.accessTokenExpiration } returns 3600000L
-        every { jwtProperties.refreshTokenExpiration } returns 3600000L
-        every { tokenService.generate(any(), any()) } returns "token"
-        every { refreshTokenRepository.save(any(), any()) } returns Unit
+        every { generateTokenUseCase.execute(userEntity) } returns expectedResponse
 
         val actualResponse = authenticationRestApiFacade.signIn(requestDto)
 
         assertEquals(expectedResponse, actualResponse)
         verify { userSignInUseCase.execute(requestDto) }
-        verify { tokenService.generate(any(), any()) }
-        verify { refreshTokenRepository.save(any(), any()) }
     }
 
     @Test
@@ -91,17 +81,12 @@ class AuthenticationRestApiFacadeTest {
         val expectedResponse = AuthenticationResponseDto("token", "token", "id", email, "testuser", null)
 
         every { userSignUpUseCase.execute(requestDto) } returns expectedUser
-        every { jwtProperties.accessTokenExpiration } returns 3600000L
-        every { jwtProperties.refreshTokenExpiration } returns 3600000L
-        every { tokenService.generate(email, any()) } returns "token"
-        every { refreshTokenRepository.save(any(), any()) } returns Unit
+        every { generateTokenUseCase.execute(expectedUser) } returns expectedResponse
 
         val actualResponse = authenticationRestApiFacade.signUp(requestDto)
 
         assertEquals(expectedResponse, actualResponse)
         verify { userSignUpUseCase.execute(requestDto) }
-        verify { tokenService.generate(any(), any()) }
-        verify { refreshTokenRepository.save(any(), any()) }
     }
 
     @Test

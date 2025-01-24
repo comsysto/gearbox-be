@@ -1,5 +1,6 @@
 package de.comsystoreply.gearbox.application.user.model
 
+import de.comsystoreply.gearbox.application.blog.model.BlogEntity
 import de.comsystoreply.gearbox.domain.user.model.User
 import jakarta.persistence.*
 
@@ -11,7 +12,15 @@ data class UserEntity(
     val email: String,
     val username: String,
     val password: String,
-    val profileImageUrl: String?
+    val profileImageUrl: String?,
+
+    @ManyToMany
+    @JoinTable(
+        name = "blog_likes",
+        joinColumns = [JoinColumn(name = "user_id")],
+        inverseJoinColumns = [JoinColumn(name = "blog_id")]
+    )
+    val likedBlogs: MutableSet<BlogEntity> = mutableSetOf()
 ) {
     fun toDomain(): User = User(
         id = id,

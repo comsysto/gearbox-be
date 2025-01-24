@@ -1,4 +1,4 @@
-package de.comsystoreply.gearbox.domain.user.domain
+package de.comsystoreply.gearbox.domain.user.service
 
 import de.comsystoreply.gearbox.domain.user.model.User
 import de.comsystoreply.gearbox.domain.user.port.api.*
@@ -14,6 +14,9 @@ class UserService(private val userRepository: UserRepository) : UserApiFacade {
 
     override fun findByEmail(email: String): User =
         userRepository.findByEmail(email) ?: throw UserNotFoundException("User is not found.")
+
+    override fun findById(id: String): User =
+        userRepository.findById(id) ?: throw UserNotFoundException("User is not found.")
 
     override fun signIn(details: UserInputDetails): User {
         validateBasicCredentials(details.email, details.password)
