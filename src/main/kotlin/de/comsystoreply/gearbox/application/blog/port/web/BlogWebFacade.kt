@@ -1,6 +1,7 @@
 package de.comsystoreply.gearbox.application.blog.port.web
 
 import de.comsystoreply.gearbox.application.blog.model.BlogEntity
+import de.comsystoreply.gearbox.application.user.model.UserEntity
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import java.time.LocalDateTime
@@ -54,22 +55,38 @@ data class BlogResponseDto(
     val title: String,
     val content: String,
     val thumbnailImageUrl: String,
-    val userId: String,
     val createDate: LocalDateTime,
     var numberOfLikes: Int,
-    val category: String
+    val category: String,
+    val author: UserResponseDto,
 ) {
     companion object {
-        fun fromEntity(blog: BlogEntity): BlogResponseDto {
+        fun fromEntity(blog: BlogEntity, user: UserResponseDto): BlogResponseDto {
             return BlogResponseDto(
                 blog.id,
                 blog.title,
                 blog.content,
                 blog.thumbnailImageUrl,
-                blog.userId,
                 blog.createDate,
                 blog.numberOfLikes,
-                blog.category.name
+                blog.category.name,
+                user
+            )
+        }
+    }
+}
+
+data class UserResponseDto(
+    val id: String,
+    val username: String,
+    val profileImageUrl: String?
+) {
+    companion object {
+        fun fromEntity(user: UserEntity): UserResponseDto {
+            return UserResponseDto(
+                user.id,
+                user.username,
+                user.profileImageUrl
             )
         }
     }

@@ -1,10 +1,7 @@
 package de.comsystoreply.gearbox.application.user.adapter.web
 
 import de.comsystoreply.gearbox.application.security.config.JwtProperties
-import de.comsystoreply.gearbox.application.user.adapter.api.auth.GenerateTokenUseCase
-import de.comsystoreply.gearbox.application.user.adapter.api.auth.RefreshTokenUseCase
-import de.comsystoreply.gearbox.application.user.adapter.api.auth.UserSignInUseCase
-import de.comsystoreply.gearbox.application.user.adapter.api.auth.UserSignUpUseCase
+import de.comsystoreply.gearbox.application.user.adapter.api.auth.*
 import de.comsystoreply.gearbox.application.user.model.UserEntity
 import de.comsystoreply.gearbox.application.user.port.web.AuthenticationRequestDto
 import de.comsystoreply.gearbox.application.user.port.web.AuthenticationResponseDto
@@ -25,7 +22,7 @@ class AuthenticationRestApiFacadeTest {
     private lateinit var userSignInUseCase: UserSignInUseCase
     private lateinit var userSignUpUseCase: UserSignUpUseCase
     private lateinit var generateTokenUseCase: GenerateTokenUseCase
-    private lateinit var refreshTokenUseCase: RefreshTokenUseCase
+    private lateinit var getTokenOwnerUseCase: GetTokenOwnerUseCase
     private lateinit var authenticationRestApiFacade: AuthenticationRestApiFacade
 
 
@@ -35,12 +32,12 @@ class AuthenticationRestApiFacadeTest {
         userSignInUseCase = mockk()
         userSignUpUseCase = mockk()
         generateTokenUseCase = mockk()
-        refreshTokenUseCase = mockk()
+        getTokenOwnerUseCase = mockk()
         authenticationRestApiFacade = AuthenticationRestApiFacade(
             userSignInUseCase,
             userSignUpUseCase,
             generateTokenUseCase,
-            refreshTokenUseCase
+            getTokenOwnerUseCase
         )
     }
 
@@ -53,6 +50,7 @@ class AuthenticationRestApiFacadeTest {
         val expectedResponse = AuthenticationResponseDto("token", "token", "id", email, "testuser", null)
 
         every { userSignInUseCase.execute(requestDto) } returns userEntity
+        every { generateTokenUseCase.execute(userEntity) } returns expectedResponse
 
         val actualResponse = authenticationRestApiFacade.signIn(requestDto)
 
@@ -83,6 +81,7 @@ class AuthenticationRestApiFacadeTest {
         val expectedResponse = AuthenticationResponseDto("token", "token", "id", email, "testuser", null)
 
         every { userSignUpUseCase.execute(requestDto) } returns expectedUser
+        every { generateTokenUseCase.execute(expectedUser) } returns expectedResponse
 
         val actualResponse = authenticationRestApiFacade.signUp(requestDto)
 
