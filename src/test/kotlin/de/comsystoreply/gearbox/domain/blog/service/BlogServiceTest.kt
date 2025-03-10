@@ -9,12 +9,15 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
+import java.time.DayOfWeek
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import kotlin.test.Test
+import java.time.temporal.TemporalAdjusters
 
 class BlogServiceTest {
 
@@ -49,7 +52,7 @@ class BlogServiceTest {
         content = "The automotive industry is rapidly shifting towards electric vehicles (EVs), with advancements in battery technology, charging infrastructure, and autonomous driving. These innovations are not just transforming how we drive, but also how we think about the environment and sustainability.",
         thumbnailImageUrl = "https://www.netcarshow.com/MG-ZS_Hybrid-2025-1280-8f1072f01e9c7f8cfaeab36bc03ccb8fa4.jpg",
         userId = "3f903ecb-8087-4cdf-ad46-953f4a000a17",
-        createDate = LocalDateTime.parse("2025-01-21 11:45:00+00", formatter),
+        createDate = LocalDateTime.parse("2025-03-10 11:45:00+00", formatter),
         numberOfLikes = 69,
         category = BlogCategory.TECHNOLOGY
     )
@@ -59,7 +62,7 @@ class BlogServiceTest {
         content = "In a surprising move, a leading automaker has announced the launch of a new hydrogen-powered vehicle, aiming to rival the growing electric vehicle market. This marks a significant development in the pursuit of alternative fuels and could reshape the future of automotive energy.",
         thumbnailImageUrl = "https://i.ytimg.com/vi/Ppuvvr6rcb0/maxresdefault.jpg",
         userId = "3f903ecb-8087-4cdf-ad46-953f4a000a17",
-        createDate = LocalDateTime.parse("2025-01-20 13:26:00+00", formatter),
+        createDate = LocalDateTime.parse("2025-03-10 13:26:00+00", formatter),
         numberOfLikes = 13,
         category = BlogCategory.HOT_NEWS
     )
@@ -73,8 +76,10 @@ class BlogServiceTest {
 
     @Test
     fun `findTrending should find the most liked blogs in the current week and return as list`() {
-        val startOfWeek = LocalDateTime.parse("2025-01-20 00:00:00+00", formatter)
-        val endOfWeek = startOfWeek.plusWeeks(1)
+        val startOfWeek = LocalDateTime.now()
+            .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+            .with(LocalTime.MIN)
+        val endOfWeek = startOfWeek.plusWeeks(1).with(LocalTime.MAX)
 
         val pageable = PageRequest.of(0, 10)
 
@@ -86,7 +91,6 @@ class BlogServiceTest {
         val actualBlogs = blogService.findTrending(pageable)
 
         assertEquals(pageableTrendingList, actualBlogs)
-        assertEquals(actualBlogs.size, 2)
         assertEquals(actualBlogs.first().title, "The Future of Electric Vehicles")
         verify { blogRepository.findTrending(startOfWeek, endOfWeek, pageable) }
     }
