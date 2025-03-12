@@ -1,7 +1,6 @@
 package de.comsystoreply.gearbox.application.user.facade
 
 import de.comsystoreply.gearbox.application.security.config.JwtProperties
-import de.comsystoreply.gearbox.application.user.facade.web.AuthenticationRestApiFacade
 import de.comsystoreply.gearbox.application.user.model.UserEntity
 import de.comsystoreply.gearbox.application.user.port.web.AuthenticationRequestDto
 import de.comsystoreply.gearbox.application.user.port.web.AuthenticationResponseDto

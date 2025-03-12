@@ -1,4 +1,4 @@
-package de.comsystoreply.gearbox.application.user.facade.web
+package de.comsystoreply.gearbox.application.user.facade
 
 import de.comsystoreply.gearbox.application.user.usecase.GenerateTokenUseCase
 import de.comsystoreply.gearbox.application.user.usecase.GetTokenOwnerUseCase
