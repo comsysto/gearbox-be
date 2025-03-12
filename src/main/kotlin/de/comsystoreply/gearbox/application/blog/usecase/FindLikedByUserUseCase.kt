@@ -1,4 +1,4 @@
-package de.comsystoreply.gearbox.application.blog.adapter.api
+package de.comsystoreply.gearbox.application.blog.usecase
 
 import de.comsystoreply.gearbox.application.blog.model.BlogEntity
 import de.comsystoreply.gearbox.domain.blog.port.api.BlogApiFacade
@@ -7,10 +7,10 @@ import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Component
 
 @Component
-class SearchBlogsUseCase(private val blogApi: BlogApiFacade) {
-    fun execute(query: String, pageable: Pageable): Page<BlogEntity> {
+class FindLikedByUserUseCase(private val blogApi: BlogApiFacade) {
+    fun execute(userId: String, pageable: Pageable): Page<BlogEntity> {
         return blogApi
-            .search(query, pageable)
+            .findLikedBy(userId, pageable)
             .map { BlogEntity.fromDomain(it) }
     }
 }

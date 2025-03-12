@@ -1,10 +1,13 @@
-package de.comsystoreply.gearbox.application.user.adapter.web
+package de.comsystoreply.gearbox.application.user.facade
 
 import de.comsystoreply.gearbox.application.security.config.JwtProperties
-import de.comsystoreply.gearbox.application.user.adapter.api.auth.*
 import de.comsystoreply.gearbox.application.user.model.UserEntity
 import de.comsystoreply.gearbox.application.user.port.web.AuthenticationRequestDto
 import de.comsystoreply.gearbox.application.user.port.web.AuthenticationResponseDto
+import de.comsystoreply.gearbox.application.user.usecase.GenerateTokenUseCase
+import de.comsystoreply.gearbox.application.user.usecase.GetTokenOwnerUseCase
+import de.comsystoreply.gearbox.application.user.usecase.UserSignInUseCase
+import de.comsystoreply.gearbox.application.user.usecase.UserSignUpUseCase
 import de.comsystoreply.gearbox.domain.user.port.api.UserAlreadyExistsException
 import de.comsystoreply.gearbox.domain.user.port.api.UserNotFoundException
 import io.mockk.every

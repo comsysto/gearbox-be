@@ -1,12 +1,12 @@
-package de.comsystoreply.gearbox.application.blog.adapter.web
+package de.comsystoreply.gearbox.application.blog.facade
 
-import de.comsystoreply.gearbox.application.blog.adapter.api.*
 import de.comsystoreply.gearbox.application.blog.model.BlogEntity
 import de.comsystoreply.gearbox.application.blog.port.web.BlogResponseDto
 import de.comsystoreply.gearbox.application.blog.port.web.BlogWebFacade
 import de.comsystoreply.gearbox.application.blog.port.web.LikeRequestDto
 import de.comsystoreply.gearbox.application.blog.port.web.UserResponseDto
-import de.comsystoreply.gearbox.application.user.adapter.api.FindUserByIdUseCase
+import de.comsystoreply.gearbox.application.blog.usecase.*
+import de.comsystoreply.gearbox.application.user.usecase.FindUserByIdUseCase
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service

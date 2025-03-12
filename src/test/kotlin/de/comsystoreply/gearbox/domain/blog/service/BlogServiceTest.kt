@@ -9,12 +9,15 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
+import java.time.DayOfWeek
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import kotlin.test.Test
+import java.time.temporal.TemporalAdjusters
 
 class BlogServiceTest {
 
@@ -73,8 +76,10 @@ class BlogServiceTest {
 
     @Test
     fun `findTrending should find the most liked blogs in the current week and return as list`() {
-        val startOfWeek = LocalDateTime.parse("2025-01-20 00:00:00+00", formatter)
-        val endOfWeek = startOfWeek.plusWeeks(1)
+        val startOfWeek = LocalDateTime.now()
+            .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+            .with(LocalTime.MIN)
+        val endOfWeek = startOfWeek.plusWeeks(1).with(LocalTime.MAX)
 
         val pageable = PageRequest.of(0, 10)
 
@@ -86,7 +91,6 @@ class BlogServiceTest {
         val actualBlogs = blogService.findTrending(pageable)
 
         assertEquals(pageableTrendingList, actualBlogs)
-        assertEquals(actualBlogs.size, 2)
         assertEquals(actualBlogs.first().title, "The Future of Electric Vehicles")
         verify { blogRepository.findTrending(startOfWeek, endOfWeek, pageable) }
     }

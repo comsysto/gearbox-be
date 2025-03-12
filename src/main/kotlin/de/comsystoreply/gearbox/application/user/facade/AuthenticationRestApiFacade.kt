@@ -1,9 +1,9 @@
-package de.comsystoreply.gearbox.application.user.adapter.web
+package de.comsystoreply.gearbox.application.user.facade
 
-import de.comsystoreply.gearbox.application.user.adapter.api.auth.GenerateTokenUseCase
-import de.comsystoreply.gearbox.application.user.adapter.api.auth.GetTokenOwnerUseCase
-import de.comsystoreply.gearbox.application.user.adapter.api.auth.UserSignInUseCase
-import de.comsystoreply.gearbox.application.user.adapter.api.auth.UserSignUpUseCase
+import de.comsystoreply.gearbox.application.user.usecase.GenerateTokenUseCase
+import de.comsystoreply.gearbox.application.user.usecase.GetTokenOwnerUseCase
+import de.comsystoreply.gearbox.application.user.usecase.UserSignInUseCase
+import de.comsystoreply.gearbox.application.user.usecase.UserSignUpUseCase
 import de.comsystoreply.gearbox.application.user.port.web.*
 import org.springframework.stereotype.Service
 

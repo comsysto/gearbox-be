@@ -1,4 +1,4 @@
-package de.comsystoreply.gearbox.application.user.adapter.api.auth
+package de.comsystoreply.gearbox.application.user.usecase
 
 import de.comsystoreply.gearbox.application.security.config.JwtProperties
 import de.comsystoreply.gearbox.application.security.repository.RefreshTokenRepository
