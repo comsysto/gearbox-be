@@ -39,7 +39,7 @@ interface BlogApiFacade {
     /**
      * @property [query] string query to search blog title
      * @property [pageable] defines page object that contains size and page
-     * @return returns the list of blogs that match the query
+     * @return returns the pageable list of blogs with title that matches the search criteria
      */
     fun search(query: String, pageable: Pageable): Page<Blog>
 

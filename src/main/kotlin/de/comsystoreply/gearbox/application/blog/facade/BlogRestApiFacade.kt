@@ -4,7 +4,7 @@ import de.comsystoreply.gearbox.application.blog.model.BlogEntity
 import de.comsystoreply.gearbox.application.blog.port.web.BlogResponseDto
 import de.comsystoreply.gearbox.application.blog.port.web.BlogWebFacade
 import de.comsystoreply.gearbox.application.blog.port.web.LikeRequestDto
-import de.comsystoreply.gearbox.application.blog.port.web.UserResponseDto
+import de.comsystoreply.gearbox.application.blog.port.web.AuthorResponseDto
 import de.comsystoreply.gearbox.application.blog.usecase.*
 import de.comsystoreply.gearbox.application.user.usecase.FindUserByIdUseCase
 import org.springframework.data.domain.Page
@@ -57,7 +57,7 @@ class BlogRestApiFacade(
 
     private fun mapBlogWithAuthor(blog: BlogEntity): BlogResponseDto {
         val user = findUserByIdUseCase.execute(blog.userId)
-        val userResponseDto = UserResponseDto.fromEntity(user)
-        return BlogResponseDto.fromEntity(blog, userResponseDto)
+        val authorResponseDto = AuthorResponseDto.fromEntity(user)
+        return BlogResponseDto.fromEntity(blog, authorResponseDto)
     }
 }

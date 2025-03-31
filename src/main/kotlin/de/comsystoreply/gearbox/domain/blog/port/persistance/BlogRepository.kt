@@ -52,9 +52,9 @@ interface BlogRepository {
     fun isBlogLikedBy(blogId: String, userId: String): Boolean
 
     /**
-     * @property [query] a String used to search blogs based on title or content
+     * @property [query] search criteria, simple string
      * @property [pageable] defines which page and size should return
-     * @return A list of Blog objects matching the search query
+     * @return returns the list of Blog objects with title that matches the search criteria
      */
     fun search(query: String, pageable: Pageable): Page<Blog>
 

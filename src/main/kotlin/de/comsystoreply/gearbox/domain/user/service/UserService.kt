@@ -3,6 +3,8 @@ package de.comsystoreply.gearbox.domain.user.service
 import de.comsystoreply.gearbox.domain.user.model.User
 import de.comsystoreply.gearbox.domain.user.port.api.*
 import de.comsystoreply.gearbox.domain.user.port.persistance.UserRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -17,6 +19,8 @@ class UserService(private val userRepository: UserRepository) : UserApiFacade {
 
     override fun findById(id: String): User =
         userRepository.findById(id) ?: throw UserNotFoundException("User is not found.")
+
+    override fun search(query: String, pageable: Pageable): Page<User> = userRepository.search(query, pageable)
 
     override fun signIn(details: UserInputDetails): User {
         validateBasicCredentials(details.email, details.password)

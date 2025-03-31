@@ -3,7 +3,7 @@ package de.comsystoreply.gearbox.application.user.port.web
 import de.comsystoreply.gearbox.domain.user.port.api.UserInputDetails
 
 /**
- * Interface which defines methods which expose Authentication features via REST API
+ * Interface which defines methods that expose Authentication features via REST API
  */
 interface AuthenticationWebFacade {
     /**

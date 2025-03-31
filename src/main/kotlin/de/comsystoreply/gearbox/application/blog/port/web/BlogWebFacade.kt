@@ -39,7 +39,8 @@ interface BlogWebFacade {
     /**
      * Function returns list of blogs which
      * @property [query] simple search query
-     * @return returns the list of [BlogResponseDto] that match the query
+     * @property [pageable] simple page request
+     * @return returns the pageable list of [BlogResponseDto] that match the [query] search criteria
      */
     fun search(query: String, pageable: Pageable): Page<BlogResponseDto>
 
@@ -58,10 +59,10 @@ data class BlogResponseDto(
     val createDate: LocalDateTime,
     var numberOfLikes: Int,
     val category: String,
-    val author: UserResponseDto,
+    val author: AuthorResponseDto,
 ) {
     companion object {
-        fun fromEntity(blog: BlogEntity, user: UserResponseDto): BlogResponseDto {
+        fun fromEntity(blog: BlogEntity, user: AuthorResponseDto): BlogResponseDto {
             return BlogResponseDto(
                 blog.id,
                 blog.title,
@@ -76,14 +77,14 @@ data class BlogResponseDto(
     }
 }
 
-data class UserResponseDto(
+data class AuthorResponseDto(
     val id: String,
     val username: String,
     val profileImageUrl: String?
 ) {
     companion object {
-        fun fromEntity(user: UserEntity): UserResponseDto {
-            return UserResponseDto(
+        fun fromEntity(user: UserEntity): AuthorResponseDto {
+            return AuthorResponseDto(
                 user.id,
                 user.username,
                 user.profileImageUrl
@@ -96,5 +97,3 @@ data class LikeRequestDto(
     val blogId: String,
     val userId: String
 )
-
-data class SearchQueryDto(val query: String, val page: Int, val pageSize: Int)

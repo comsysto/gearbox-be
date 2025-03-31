@@ -3,7 +3,6 @@ package de.comsystoreply.gearbox.bff.adapter.web
 import de.comsystoreply.gearbox.application.blog.port.web.BlogResponseDto
 import de.comsystoreply.gearbox.application.blog.port.web.BlogWebFacade
 import de.comsystoreply.gearbox.application.blog.port.web.LikeRequestDto
-import de.comsystoreply.gearbox.application.blog.port.web.SearchQueryDto
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.http.HttpStatus
@@ -51,10 +50,14 @@ class BlogController(
         return ResponseEntity(response, HttpStatus.OK)
     }
 
-    @PostMapping("/search")
-    fun search(@RequestBody dto: SearchQueryDto): ResponseEntity<Page<BlogResponseDto>> {
-        val pageRequest = PageRequest.of(dto.page, dto.pageSize)
-        val response = webFacade.search(dto.query, pageRequest)
+    @PostMapping("/search/{page}/{size}")
+    fun search(
+        @RequestBody query: String,
+        @PathVariable page: Int,
+        @PathVariable size: Int
+    ): ResponseEntity<Page<BlogResponseDto>> {
+        val pageRequest = PageRequest.of(page, size)
+        val response = webFacade.search(query, pageRequest)
         return ResponseEntity(response, HttpStatus.OK)
     }
 

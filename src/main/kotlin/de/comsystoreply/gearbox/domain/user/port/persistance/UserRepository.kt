@@ -1,6 +1,8 @@
 package de.comsystoreply.gearbox.domain.user.port.persistance
 
 import de.comsystoreply.gearbox.domain.user.model.User
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 
 
 /**
@@ -31,6 +33,13 @@ interface UserRepository {
      * @return If exists, returns User else returns null
      */
     fun findById(id: String): User?
+
+    /**
+     * @property [query] search criteria, simple string
+     * @property [pageable] defines which page and size should return
+     * @return returns the pageable list of User objects whose usernames match the search criteria
+     */
+    fun search(query: String, pageable: Pageable): Page<User>
 
     /**
      * @property [user] new User object for creation

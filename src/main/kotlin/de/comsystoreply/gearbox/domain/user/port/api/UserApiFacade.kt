@@ -1,6 +1,8 @@
 package de.comsystoreply.gearbox.domain.user.port.api
 
 import de.comsystoreply.gearbox.domain.user.model.User
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 
 /**
  * User API interface which provides user search and fetching
@@ -27,6 +29,14 @@ interface UserApiFacade {
      * @throws UserNotFoundException if user with given [id] is not found
      */
     fun findById(id: String): User
+
+
+    /**
+     * @property [query] search criteria for users
+     * @property [pageable] defines page object that contains size and page
+     * @return returns the pageable list of users whose username matches the search criteria
+     */
+    fun search(query: String, pageable: Pageable): Page<User>
 
     /**
      * Function gets user credentials, validate them and return the User if it exists

@@ -3,6 +3,8 @@ package de.comsystoreply.gearbox.application.user.adapter.persistence
 import de.comsystoreply.gearbox.domain.user.model.User
 import de.comsystoreply.gearbox.application.user.model.UserEntity
 import de.comsystoreply.gearbox.domain.user.port.persistance.UserRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Repository
@@ -32,6 +34,10 @@ class JpaUserRepository(
         return jpaUserEntityRepository.findById(id)?.toDomain()
     }
 
+    override fun search(query: String, pageable: Pageable): Page<User> {
+        return jpaUserEntityRepository.findAllByUsernameContainingIgnoreCase(query, pageable).map { it.toDomain() }
+    }
+
     override fun create(user: User): User {
         val entity = UserEntity.fromDomain(user)
         val encoded = entity.copy(password = encoder.encode(user.password))
@@ -45,4 +51,5 @@ interface JpaUserEntityRepository : JpaRepository<UserEntity, Long> {
     fun findByEmail(email: String): UserEntity?
     fun findByUsername(username: String): UserEntity?
     fun findById(id: String): UserEntity?
+    fun findAllByUsernameContainingIgnoreCase(username: String, pageable: Pageable): Page<UserEntity>
 }
