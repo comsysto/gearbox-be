@@ -45,6 +45,14 @@ class UserService(private val userRepository: UserRepository) : UserApiFacade {
         return userRepository.create(user)
     }
 
+    override fun save(user: User): User {
+        if (userRepository.findById(user.id) == null) {
+            throw UserNotFoundException("User is not found.")
+        }
+
+        return userRepository.save(user)
+    }
+
     private fun validateBasicCredentials(email: String, password: String) {
         val emailResult = CredentialsValidator.validateEmail(email)
         val passwordResult = CredentialsValidator.validatePassword(password)

@@ -1,3 +1,35 @@
+insert into app_user (id, email, password, profile_image_url, username)
+values ('dcb9483c-db19-4c03-b914-75a7d6e10282',
+        'jeremiah@clark.com',
+        '$2a$10$UfUiwNZb5xvByP8HkHYZ7uEkGCMF9L2SueHcz1Z/Khu2EFKKTULHO',
+        NULL,
+        'jeremiahclark'),
+       ('3f903ecb-8087-4cdf-ad46-95314a000a17',
+        'filip@kisic.com',
+        '$2a$10$D7C7WMYrisf9HazWv.vtAujvUfZ0MnitqRNxzVAPAt8O3ktEsmiu',
+        NULL,
+        'filipkisic'),
+       ('9333f76b-af67-4909-9a82-32ced2b6eb15',
+        'saul@hudson.com',
+        '$2a$10$8756P4V0wvuaQxg00cIj08.heBczcYSncP7X61hWbiVaraC8EXgSM6',
+        NULL,
+        'slash'),
+       ('02305266-c083-4796-b3a7-520737fe2005',
+        'hames@muy.com',
+        '$2a$10$JRgp05zWmKzkrok,n5n2Ruq6an9iSufg10YwF8g18P.fwGvL4U/7m',
+        NULL,
+        'hanesmuy'),
+       ('41997705-1017-4605-a479-dcc0216dc417',
+        'rikardo@hamod.com',
+        '$2a$10$Jsc8JvLHmoD0bzRh1U59w06qF1Z6gzKSftfuBpul0jQR6UekrW0y2',
+        NULL,
+        'rikardohanod'),
+       ('bddcb906-c0c8-4a1b-8bb5-e0d0df6cc651',
+        'matte@blanco.com',
+        '$2a$10$e7X/FqsOttNEVQg7351M5ewlklYadbFGxsTWsCcxaDyC6qkXHPC2C',
+        NULL,
+        'matteblanco');
+
 insert into blog (id, title, content, thumbnail_image_url, create_date, number_of_likes, category, user_id)
 values ('b6507f13-9936-4ef0-93d1-9f73bb5fcedb',
         'The Future of Electric Vehicles',
@@ -96,12 +128,12 @@ values ('0e7bd5a8-27a9-432f-920e-1efed7a6d8f6',
 
 update blog
 set number_of_likes = 2
-where id = 'b6507f13-9936-4ef0-93d1-9f73bb5fcedb'
+where id = 'b6507f13-9936-4ef0-93d1-9f73bb5fcedb';
 
 update blog
 set number_of_likes = 1
-where id = '8c4a9eeb-77b4-4947-a8d7-1b5b7894b92c'
+where id = '8c4a9eeb-77b4-4947-a8d7-1b5b7894b92c';
 
 update blog
 set number_of_likes = 1
-where id = '0e7bd5a8-27a9-432f-920e-1efed7a6d8f6'
+where id = '0e7bd5a8-27a9-432f-920e-1efed7a6d8f6';

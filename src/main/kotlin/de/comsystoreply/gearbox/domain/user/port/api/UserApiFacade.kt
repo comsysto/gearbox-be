@@ -60,6 +60,14 @@ interface UserApiFacade {
      * @throws UserAlreadyExistsException if [details] match with the existing details in repository
      */
     fun signUp(details: UserInputDetails): User
+
+    /**
+     * Function gets the new user object and updates its properties
+     * @property [user] object with new properties ready to save
+     * @return User domain object with updated properties
+     * @throws UserNotFoundException if [user] contains invalid id
+     */
+    fun save(user: User): User
 }
 
 data class UserInputDetails(

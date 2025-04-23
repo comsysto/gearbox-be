@@ -37,13 +37,13 @@ interface UserRepository {
     /**
      * @property [query] search criteria, simple string
      * @property [pageable] defines which page and size should return
-     * @return returns the pageable list of User objects whose usernames match the search criteria
+     * @return Pageable list of User objects whose usernames match the search criteria
      */
     fun search(query: String, pageable: Pageable): Page<User>
 
     /**
      * @property [user] new User object for creation
-     * @return Returns the newly created User
+     * @return The newly created User
      */
     fun create(user: User): User
 
@@ -51,4 +51,10 @@ interface UserRepository {
      * @return A list of all users
      */
     fun getAll(): List<User>
+
+    /**
+     * @property [user] object with new properties ready to save
+     * @return User domain object with updated properties
+     */
+    fun save(user: User): User
 }
