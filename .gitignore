@@ -40,4 +40,4 @@ out/
 .kotlin
 
 ### Firebase credentials ###
-!**/src/main/resources/firebase-admin-sdk.json
+src/main/resources/firebase-admin-sdk.json
