@@ -18,25 +18,34 @@ interface UserWebFacade {
     fun search(query: String, pageable: Pageable): Page<UserResponseDto>
 
     /**
-     * Function gets the image with userId from the user returns the user with the updated profile image url
-     * @property [userId] user identifier
+     * Function gets the user id and returns the complete user data for the given id
+     * @property [id] user identifier
+     * @return [UserResponseDto] for the given id
+     */
+    fun getProfileData(id: String): UserResponseDto
+
+    /**
+     * Function gets the image with userId from the user and returns the user with the updated profile image url.
+     * @property [profileUserId] user id for profile
      * @property [file] image file ready to set as profile image
      * @return Updated [UserResponseDto] with new profile image url property
      */
-    fun uploadProfileImage(userId: String, file: MultipartFile): UserResponseDto
+    fun uploadProfileImage(profileUserId: String, file: MultipartFile): UserResponseDto
 }
 
 data class UserResponseDto(
     val id: String,
     val username: String,
-    val profileImageUrl: String?
+    val profileImageUrl: String?,
+    val isProfileOwner: Boolean = false,
 ) {
     companion object {
-        fun fromEntity(entity: UserEntity): UserResponseDto {
+        fun fromEntity(entity: UserEntity, isProfileOwner: Boolean = false): UserResponseDto {
             return UserResponseDto(
                 id = entity.id,
                 username = entity.username,
-                profileImageUrl = entity.profileImageUrl
+                profileImageUrl = entity.profileImageUrl,
+                isProfileOwner = isProfileOwner
             )
         }
     }

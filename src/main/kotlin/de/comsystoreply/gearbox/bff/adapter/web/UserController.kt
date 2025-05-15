@@ -26,12 +26,18 @@ class UserController(
         return ResponseEntity(response, HttpStatus.OK)
     }
 
+    @GetMapping("/{id}")
+    fun getById(@PathVariable id: String): ResponseEntity<UserResponseDto> {
+        val result = userWebFacade.getProfileData(id)
+        return ResponseEntity(result, HttpStatus.OK)
+    }
+
     @PostMapping("/profile/uploadImage", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     fun uploadProfileImage(
-        @RequestPart("userId") userId: String,
+        @RequestPart("userId") actorUserId: String,
         @RequestPart("image") file: MultipartFile
     ): ResponseEntity<UserResponseDto> {
-        val response = userWebFacade.uploadProfileImage(userId, file)
+        val response = userWebFacade.uploadProfileImage(actorUserId, file)
         return ResponseEntity(response, HttpStatus.OK)
     }
 }

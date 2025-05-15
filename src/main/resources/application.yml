@@ -14,6 +14,9 @@ spring:
   sql:
     init:
       mode: embedded
+  servlet:
+    multipart:
+      max-file-size: 2MB
 jwt:
   key: ${JWT_KEY}
   accessTokenExpiration: 86_400_000
