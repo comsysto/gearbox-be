@@ -14,7 +14,6 @@ class AuthenticationRestApiFacade(
     private val generateTokenUseCase: GenerateTokenUseCase,
     private val getTokenOwnerUseCase: GetTokenOwnerUseCase
 ) : AuthenticationWebFacade {
-
     override fun signIn(request: AuthenticationRequestDto): AuthenticationResponseDto {
         val user = userSignInUseCase.execute(request)
         return generateTokenUseCase.execute(user)
@@ -26,7 +25,7 @@ class AuthenticationRestApiFacade(
     }
 
     override fun refreshToken(request: RefreshTokenRequestDto): AuthenticationResponseDto {
-        val user = getTokenOwnerUseCase.execute(request)
+        val user = getTokenOwnerUseCase.execute(request.refreshToken)
         return generateTokenUseCase.execute(user)
     }
 }

@@ -45,6 +45,11 @@ class JpaUserRepository(
     }
 
     override fun getAll(): List<User> = jpaUserEntityRepository.findAll().map { it.toDomain() }
+
+    override fun save(user: User): User {
+        val entity = UserEntity.fromDomain(user)
+        return jpaUserEntityRepository.save(entity).toDomain()
+    }
 }
 
 interface JpaUserEntityRepository : JpaRepository<UserEntity, Long> {
