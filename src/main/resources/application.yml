@@ -14,7 +14,12 @@ spring:
   sql:
     init:
       mode: embedded
+  servlet:
+    multipart:
+      max-file-size: 2MB
 jwt:
   key: ${JWT_KEY}
   accessTokenExpiration: 86_400_000
   refreshTokenExpiration: 604_800_000
+firebase:
+  storage-bucket: gearbox-c768b.appspot.com

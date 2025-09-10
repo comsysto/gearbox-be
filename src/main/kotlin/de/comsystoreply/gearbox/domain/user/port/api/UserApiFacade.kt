@@ -11,7 +11,7 @@ interface UserApiFacade {
     /**
      * @property [email] provided by user, must be valid email address
      * @property [password] provided by user
-     * @return returns User domain object
+     * @return returns [User] domain object
      * @throws UserNotFoundException if user with given [email] and [password] is not found
      */
     fun findByEmailAndPassword(email: String, password: String): User
@@ -25,7 +25,7 @@ interface UserApiFacade {
 
     /**
      * @property [id] must be existing user id
-     * @return returns User domain object
+     * @return returns [User] domain object
      * @throws UserNotFoundException if user with given [id] is not found
      */
     fun findById(id: String): User
@@ -34,7 +34,7 @@ interface UserApiFacade {
     /**
      * @property [query] search criteria for users
      * @property [pageable] defines page object that contains size and page
-     * @return returns the pageable list of users whose username matches the search criteria
+     * @return returns the pageable list of [User] objects whose username matches the search criteria
      */
     fun search(query: String, pageable: Pageable): Page<User>
 
@@ -42,7 +42,7 @@ interface UserApiFacade {
      * Function gets user credentials, validate them and return the User if it exists
      *
      * @property [details] custom model class which contains email and password
-     * @return found User object
+     * @return found [User] object
      * @throws InvalidEmailException if [details] contains invalid email address
      * @throws PasswordPolicyViolationException if [details] password doesn't meet all password requirements
      * @throws UserNotFoundException if [details] contains credentials that doesn't match with any user
@@ -53,13 +53,34 @@ interface UserApiFacade {
      * Function gets new user data, validate credentials, checks if user exists and returns the newly created User
      *
      * @property [details] custom model class which contains all data required for new user to be created
-     * @return newly created User object
+     * @return newly created [User] object
      * @throws InvalidEmailException if [details] contains invalid email address
      * @throws PasswordMismatchException if [details] password and confirmPassword do not match
      * @throws PasswordPolicyViolationException if [details] password doesn't meet all password requirements
      * @throws UserAlreadyExistsException if [details] match with the existing details in repository
      */
     fun signUp(details: UserInputDetails): User
+
+    /**
+     * Function gets the new user object and updates its properties
+     * @property [user] object with new properties ready to save
+     * @return User domain object with updated properties
+     * @throws UserNotFoundException if [user] contains invalid id
+     */
+    fun save(user: User): User
+
+    /**
+     * Function gets actor user id, profile user id and profile image in byte form to set the new profile image for the given user if actor and profile user id's match
+     *
+     * @property [actorUserId] id of [User] who wants to change the profile image
+     * @property [profileUserId] id of [User] whose profile image should be changed
+     * @property [imageBytes] image in [ByteArray] form
+     * @property [contentType] type of image uploaded, defaults to "image/jpeg"
+     * @return [User] domain object with updated [User.profileImageUrl] property
+     * @throws UserNotFoundException if either [actorUserId] or [profileUserId] does not exist
+     * @throws UserForbiddenException if [actorUserId] and [profileUserId] do not match
+     */
+    fun setProfileImage(actorUserId: String, profileUserId: String, imageBytes: ByteArray, contentType: String? = "image/jpeg"): User
 }
 
 data class UserInputDetails(
@@ -81,3 +102,5 @@ class InvalidEmailException(message: String) : UserException(message)
 class PasswordMismatchException(message: String) : UserException(message)
 
 class PasswordPolicyViolationException(message: String) : UserException(message)
+
+class UserForbiddenException(message: String) : UserException(message)

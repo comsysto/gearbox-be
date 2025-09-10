@@ -2,6 +2,7 @@ package de.comsystoreply.gearbox.domain.user.service
 
 import de.comsystoreply.gearbox.domain.user.model.User
 import de.comsystoreply.gearbox.domain.user.port.api.*
+import de.comsystoreply.gearbox.domain.user.port.persistance.CloudImageStorage
 import de.comsystoreply.gearbox.domain.user.port.persistance.UserRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -9,7 +10,10 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class UserService(private val userRepository: UserRepository) : UserApiFacade {
+class UserService(
+    private val userRepository: UserRepository,
+    private val cloudImageStorage: CloudImageStorage
+) : UserApiFacade {
 
     override fun findByEmailAndPassword(email: String, password: String): User =
         userRepository.findByEmailAndPassword(email, password) ?: throw UserNotFoundException("User is not found.")
@@ -45,6 +49,32 @@ class UserService(private val userRepository: UserRepository) : UserApiFacade {
         return userRepository.create(user)
     }
 
+    override fun save(user: User): User {
+        if (userRepository.findById(user.id) == null) {
+            throw UserNotFoundException("User is not found.")
+        }
+
+        return userRepository.save(user)
+    }
+
+    override fun setProfileImage(
+        actorUserId: String,
+        profileUserId: String,
+        imageBytes: ByteArray,
+        contentType: String?
+    ): User {
+        val user = getValidatedUser(actorUserId, profileUserId)
+
+        if (user.profileImageUrl != null) {
+            cloudImageStorage.deleteImage(user.profileImageUrl!!)
+        }
+
+        val imageUrl = cloudImageStorage.uploadImage(imageBytes, contentType = contentType)
+        user.profileImageUrl = imageUrl
+
+        return userRepository.save(user)
+    }
+
     private fun validateBasicCredentials(email: String, password: String) {
         val emailResult = CredentialsValidator.validateEmail(email)
         val passwordResult = CredentialsValidator.validatePassword(password)
@@ -72,6 +102,20 @@ class UserService(private val userRepository: UserRepository) : UserApiFacade {
         if (passwordsDoNotMatch) {
             throw PasswordMismatchException("Passwords do not match.")
         }
+    }
+
+    private fun getValidatedUser(actorUserId: String, profileUserId: String): User {
+        val user = userRepository.findById(actorUserId)
+
+        if (user == null || userRepository.findById(profileUserId) == null) {
+            throw UserNotFoundException("User is not found.")
+        }
+
+        if (actorUserId != profileUserId) {
+            throw UserForbiddenException("Action is forbidden.")
+        }
+
+        return user
     }
 }
 
