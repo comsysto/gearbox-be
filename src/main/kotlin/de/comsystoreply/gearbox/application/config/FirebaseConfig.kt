@@ -1,8 +1,6 @@
 package de.comsystoreply.gearbox.application.config
 
 import com.google.auth.oauth2.GoogleCredentials
-import com.google.cloud.storage.Storage
-import com.google.cloud.storage.StorageOptions
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.cloud.StorageClient
@@ -41,10 +39,5 @@ class FirebaseConfig {
     @Bean
     fun firebaseStorageClient(firebaseApp: FirebaseApp): StorageClient {
         return StorageClient.getInstance(firebaseApp)
-    }
-
-    @Bean
-    fun firebaseStorage(firebaseApp: FirebaseApp): Storage {
-        return StorageOptions.getDefaultInstance().service
     }
 }

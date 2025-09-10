@@ -65,8 +65,8 @@ class UserService(
     ): User {
         val user = getValidatedUser(actorUserId, profileUserId)
 
-        if (actorUserId != profileUserId) {
-            throw UserForbiddenException("Action is forbidden.")
+        if (user.profileImageUrl != null) {
+            cloudImageStorage.deleteImage(user.profileImageUrl!!)
         }
 
         val imageUrl = cloudImageStorage.uploadImage(imageBytes, contentType = contentType)
@@ -106,9 +106,15 @@ class UserService(
 
     private fun getValidatedUser(actorUserId: String, profileUserId: String): User {
         val user = userRepository.findById(actorUserId)
+
         if (user == null || userRepository.findById(profileUserId) == null) {
             throw UserNotFoundException("User is not found.")
         }
+
+        if (actorUserId != profileUserId) {
+            throw UserForbiddenException("Action is forbidden.")
+        }
+
         return user
     }
 }
