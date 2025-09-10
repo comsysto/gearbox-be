@@ -2,6 +2,7 @@ package de.comsystoreply.gearbox.domain.user.service
 
 import de.comsystoreply.gearbox.domain.user.model.User
 import de.comsystoreply.gearbox.domain.user.port.api.*
+import de.comsystoreply.gearbox.domain.user.port.persistance.CloudImageStorage
 import de.comsystoreply.gearbox.domain.user.port.persistance.UserRepository
 import io.mockk.every
 import io.mockk.mockk
@@ -15,11 +16,13 @@ class UserServiceTest {
 
     private lateinit var userRepository: UserRepository
     private lateinit var userService: UserService
+    private lateinit var cloudImageStorage: CloudImageStorage
 
     @BeforeEach
     fun setUp() {
         userRepository = mockk()
-        userService = UserService(userRepository)
+        cloudImageStorage = mockk()
+        userService = UserService(userRepository, cloudImageStorage)
     }
 
     @Test
