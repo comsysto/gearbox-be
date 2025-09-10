@@ -1,0 +1,45 @@
+name: test-and-build.yml
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test-and-build:
+    name: Test and build
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: gearbox
+          POSTGRES_USER: developer
+          POSTGRES_PASSWORD: comsystoreply
+        ports:
+          - 5455:5432
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Run tests
+        run: ./gradlew test
+        env:
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5455/gearbox
+          SPRING_DATASOURCE_USERNAME: developer
+          SPRING_DATASOURCE_PASSWORD: comsystoreply
+
+      - name: Build application
+        run: ./gradlew build -x test
+
