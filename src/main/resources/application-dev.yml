@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: gearbox
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true
+    database-platform: H2
+
+  sql:
+    init:
+      mode: embedded
+
+  servlet:
+    multipart:
+      max-file-size: 2MB
+
+jwt:
+  key: ${JWT_KEY}
+  accessTokenExpiration: 86_400_000
+  refreshTokenExpiration: 604_800_000
+
+firebase:
+  storage-bucket: gearbox-c768b.appspot.com
+
+server:
+  port: 8080
+
+logging:
+  level:
+    org.springframework.core.env: DEBUG
+    org.springframework.boot.context.config: DEBUG
