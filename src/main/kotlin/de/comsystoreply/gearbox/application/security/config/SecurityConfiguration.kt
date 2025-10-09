@@ -16,9 +16,12 @@ class SecurityConfiguration(private val authenticationProvider: AuthenticationPr
     fun securityFilterChain(http: HttpSecurity, jwtAuthFilter: JwtAuthFilter): DefaultSecurityFilterChain {
         http
             .csrf { it.disable() }
+            .headers { it.frameOptions { it.disable() } } // Added to enable iframe view of H2 console
             .authorizeHttpRequests {
                 it
                     .requestMatchers("/api/auth/**")
+                    .permitAll()
+                    .requestMatchers("/h2-console/**")
                     .permitAll()
                     .anyRequest()
                     .fullyAuthenticated()
