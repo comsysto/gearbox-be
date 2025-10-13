@@ -1,6 +1,7 @@
 package de.comsystoreply.gearbox.application.blog.port.web
 
 import de.comsystoreply.gearbox.application.blog.model.BlogEntity
+import de.comsystoreply.gearbox.application.blog.model.CommentEntity
 import de.comsystoreply.gearbox.application.user.model.UserEntity
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -12,27 +13,27 @@ import java.time.LocalDateTime
 interface BlogWebFacade {
     /**
      * Function returns list of trending blogs
-     * @return list of [BlogResponseDto]
+     * @return the pageable list of [BlogResponseDto]
      */
     fun findTrending(pageable: Pageable): Page<BlogResponseDto>
 
     /**
      * Function returns list of latest blogs
-     * @return list of [BlogResponseDto]
+     * @return the pageable list of [BlogResponseDto]
      */
     fun findLatest(pageable: Pageable): Page<BlogResponseDto>
 
     /**
      * Function returns list of blogs whose author is user with given id
      * @property [userId] is user's unique identifier
-     * @return list of [BlogResponseDto]
+     * @return the pageable list of [BlogResponseDto]
      */
     fun findByAuthor(userId: String, pageable: Pageable): Page<BlogResponseDto>
 
     /**
      * Function returns list of blogs liked by user with given id
      * @property [userId] is user's unique identifier
-     * @return list of [BlogResponseDto]
+     * @return the pageable list of [BlogResponseDto]
      */
     fun findLikedBy(userId: String, pageable: Pageable): Page<BlogResponseDto>
 
@@ -40,15 +41,22 @@ interface BlogWebFacade {
      * Function returns list of blogs which
      * @property [query] simple search query
      * @property [pageable] simple page request
-     * @return returns the pageable list of [BlogResponseDto] that match the [query] search criteria
+     * @return the pageable list of [BlogResponseDto] that match the [query] search criteria
      */
     fun search(query: String, pageable: Pageable): Page<BlogResponseDto>
 
     /**
-     * @property [likeRequestDto] which contains blog unique identifier and user unique identifier
      * Toggles the blog like state for the blog by the user
+     * @property [likeRequestDto] contains blog unique identifier and user unique identifier
      */
     fun toggleLike(likeRequestDto: LikeRequestDto)
+
+    /**
+     * Adds new comment to the blog
+     * @property [commentRequestDto] contains blogId, authorId and content
+     * @return the pageable list of [CommentResponseDto] with new comment
+     */
+    fun makeComment(commentRequestDto: CommentRequestDto): Page<CommentResponseDto>
 }
 
 data class BlogResponseDto(
@@ -97,3 +105,27 @@ data class LikeRequestDto(
     val blogId: String,
     val userId: String
 )
+
+data class CommentRequestDto(
+    val blogId: String,
+    val userId: String,
+    val content: String,
+)
+
+data class CommentResponseDto(
+    val id: String,
+    val blogId: String,
+    val userId: String,
+    val content: String,
+) {
+    companion object {
+        fun fromEntity(comment: CommentEntity): CommentResponseDto {
+            return CommentResponseDto(
+                comment.id,
+                comment.blogId,
+                comment.userId,
+                comment.content,
+            )
+        }
+    }
+}

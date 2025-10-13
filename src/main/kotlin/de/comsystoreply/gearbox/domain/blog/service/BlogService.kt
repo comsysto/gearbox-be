@@ -1,8 +1,10 @@
 package de.comsystoreply.gearbox.domain.blog.service
 
 import de.comsystoreply.gearbox.domain.blog.model.Blog
+import de.comsystoreply.gearbox.domain.blog.model.Comment
 import de.comsystoreply.gearbox.domain.blog.port.api.*
 import de.comsystoreply.gearbox.domain.blog.port.persistance.BlogRepository
+import de.comsystoreply.gearbox.domain.blog.port.persistance.CommentRepository
 import de.comsystoreply.gearbox.domain.user.port.persistance.UserRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -11,11 +13,13 @@ import java.time.DayOfWeek
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.temporal.TemporalAdjusters
+import java.util.UUID
 
 @Service
-class BlogService(
+final class BlogService(
     private val blogRepository: BlogRepository,
     private val userRepository: UserRepository,
+    private val commentRepository: CommentRepository,
 ) : BlogApiFacade {
     override fun findTrending(pageable: Pageable): Page<Blog> {
         val startOfWeek = LocalDateTime.now()
@@ -58,5 +62,19 @@ class BlogService(
         }
 
         blogRepository.updateLikeCount(blogId, likeCount)
+    }
+
+    override fun makeComment(
+        blogId: String,
+        userId: String,
+        content: String
+    ): Page<Comment> {
+        userRepository.findById(userId) ?: throw BlogUserNotFoundException("User is not found.")
+        blogRepository.findById(blogId) ?: throw BlogNotFoundException("Blog is not found.")
+
+        val comment = Comment(UUID.randomUUID().toString(), blogId, userId, content)
+        commentRepository.save(comment)
+
+        return commentRepository.findAllByBlogId(blogId, Pageable.ofSize(6))
     }
 }

@@ -12,11 +12,11 @@ import org.springframework.web.multipart.MultipartFile
 
 @RestController
 @RequestMapping("/api/user")
-class UserController(
+final class UserController(
     private val userWebFacade: UserWebFacade
 ) {
     @PostMapping("/search/{page}/{size}")
-    fun search(
+    final fun search(
         @RequestBody query: String,
         @PathVariable page: Int,
         @PathVariable size: Int
@@ -27,13 +27,13 @@ class UserController(
     }
 
     @GetMapping("/{id}")
-    fun getById(@PathVariable id: String): ResponseEntity<UserResponseDto> {
+    final fun getById(@PathVariable id: String): ResponseEntity<UserResponseDto> {
         val result = userWebFacade.getProfileData(id)
         return ResponseEntity(result, HttpStatus.OK)
     }
 
     @PostMapping("/profile/uploadImage", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
-    fun uploadProfileImage(
+    final fun uploadProfileImage(
         @RequestPart("userId") actorUserId: String,
         @RequestPart("image") file: MultipartFile
     ): ResponseEntity<UserResponseDto> {

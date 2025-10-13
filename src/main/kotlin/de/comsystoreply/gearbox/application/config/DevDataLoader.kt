@@ -55,7 +55,7 @@ final class DevDataLoader(
             UUID.randomUUID().toString(),
             "Another Apollo Supercar is Coming",
             "In another world, the Gumpert Apollo could have sat alongside the Koenigsegg CC and Pagani Zonda lines as the origin points for decades of beloved hypercars to come. Instead, the brand and its one-time record setter faded into irrelevance after a 2013 bankruptcy. A successor company, Apollo, carried on with the oddly named Intensa Emozione in the late 2010s. Now, that Apollo has its successor. This is the Apollo Evo, a limited-run track hypercar meant to celebrate the 20th anniversary of Apollo predecessor Gumpert. It is billed as a follow-up to the Intensa Emozione, although its status as a track car puts it in competition with very different vehicles than the road-focused IE hypercar. Just 10 Evos will be built, making the new car a rarity even in the world of ultra-specialized track cars.",
-            "",
+            "https://hips.hearstapps.com/hmg-prod/images/apollo-evo-1-jpg-68c1b86f3cd4f.jpg?crop=0.731xw:0.617xh;0.0374xw,0.207xh&resize=1800:*",
             jeremyUser.id,
             LocalDateTime.of(2025, 9, 20, 17, 33),
             0,

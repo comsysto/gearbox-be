@@ -2,6 +2,8 @@ package de.comsystoreply.gearbox.bff.adapter.web
 
 import de.comsystoreply.gearbox.application.blog.port.web.BlogResponseDto
 import de.comsystoreply.gearbox.application.blog.port.web.BlogWebFacade
+import de.comsystoreply.gearbox.application.blog.port.web.CommentRequestDto
+import de.comsystoreply.gearbox.application.blog.port.web.CommentResponseDto
 import de.comsystoreply.gearbox.application.blog.port.web.LikeRequestDto
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -11,25 +13,25 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/blog")
-class BlogController(
+final class BlogController(
     private val webFacade: BlogWebFacade
 ) {
     @GetMapping("/trending/{page}/{size}")
-    fun findTrending(@PathVariable page: Int, @PathVariable size: Int): ResponseEntity<Page<BlogResponseDto>> {
+    final fun findTrending(@PathVariable page: Int, @PathVariable size: Int): ResponseEntity<Page<BlogResponseDto>> {
         val pageRequest = PageRequest.of(page, size)
         val response = webFacade.findTrending(pageRequest)
         return ResponseEntity(response, HttpStatus.OK)
     }
 
     @GetMapping("/latest/{page}/{size}")
-    fun findLatest(@PathVariable page: Int, @PathVariable size: Int): ResponseEntity<Page<BlogResponseDto>> {
+    final fun findLatest(@PathVariable page: Int, @PathVariable size: Int): ResponseEntity<Page<BlogResponseDto>> {
         val pageRequest = PageRequest.of(page, size)
         val response = webFacade.findLatest(pageRequest)
         return ResponseEntity(response, HttpStatus.OK)
     }
 
     @GetMapping("/byAuthor/{userId}/{page}/{size}")
-    fun findByAuthorId(
+    final fun findByAuthorId(
         @PathVariable userId: String,
         @PathVariable page: Int,
         @PathVariable size: Int
@@ -40,7 +42,7 @@ class BlogController(
     }
 
     @GetMapping("/likedBy/{userId}/{page}/{size}")
-    fun findLikedBy(
+    final fun findLikedBy(
         @PathVariable userId: String,
         @PathVariable page: Int,
         @PathVariable size: Int
@@ -51,7 +53,7 @@ class BlogController(
     }
 
     @PostMapping("/search/{page}/{size}")
-    fun search(
+    final fun search(
         @RequestBody query: String,
         @PathVariable page: Int,
         @PathVariable size: Int
@@ -62,8 +64,14 @@ class BlogController(
     }
 
     @PostMapping("/toggleLike")
-    fun toggleLike(@RequestBody likeRequestDto: LikeRequestDto): ResponseEntity<Unit> {
+    final fun toggleLike(@RequestBody likeRequestDto: LikeRequestDto): ResponseEntity<Unit> {
         webFacade.toggleLike(likeRequestDto)
         return ResponseEntity(HttpStatus.OK)
+    }
+
+    @PostMapping("/comment")
+    final fun makeComment(@RequestBody commentRequestDto: CommentRequestDto): ResponseEntity<Page<CommentResponseDto>> {
+        val response = webFacade.makeComment(commentRequestDto)
+        return ResponseEntity(response, HttpStatus.OK)
     }
 }

@@ -5,6 +5,8 @@ import de.comsystoreply.gearbox.application.blog.port.web.BlogResponseDto
 import de.comsystoreply.gearbox.application.blog.port.web.BlogWebFacade
 import de.comsystoreply.gearbox.application.blog.port.web.LikeRequestDto
 import de.comsystoreply.gearbox.application.blog.port.web.AuthorResponseDto
+import de.comsystoreply.gearbox.application.blog.port.web.CommentRequestDto
+import de.comsystoreply.gearbox.application.blog.port.web.CommentResponseDto
 import de.comsystoreply.gearbox.application.blog.usecase.*
 import de.comsystoreply.gearbox.application.user.usecase.FindUserByIdUseCase
 import org.springframework.data.domain.Page
@@ -20,6 +22,7 @@ class BlogRestApiFacade(
     private val findBlogsLikedByUserUseCase: FindLikedByUserUseCase,
     private val searchBlogUseCase: SearchBlogsUseCase,
     private val toggleLikeUseCase: ToggleLikeUseCase,
+    private val makeCommentUseCase: MakeCommentUseCase,
 ) : BlogWebFacade {
     override fun findTrending(pageable: Pageable): Page<BlogResponseDto> {
         return findTrendingBlogsUseCase
@@ -55,7 +58,16 @@ class BlogRestApiFacade(
         toggleLikeUseCase.execute(likeRequestDto.blogId, likeRequestDto.userId)
     }
 
-    private fun mapBlogWithAuthor(blog: BlogEntity): BlogResponseDto {
+    override fun makeComment(commentRequestDto: CommentRequestDto): Page<CommentResponseDto> {
+        val commentList = makeCommentUseCase.execute(
+            commentRequestDto.blogId,
+            commentRequestDto.userId,
+            commentRequestDto.content
+        )
+        return commentList.map { CommentResponseDto.fromEntity(it) }
+    }
+
+    private final fun mapBlogWithAuthor(blog: BlogEntity): BlogResponseDto {
         val user = findUserByIdUseCase.execute(blog.userId)
         val authorResponseDto = AuthorResponseDto.fromEntity(user)
         return BlogResponseDto.fromEntity(blog, authorResponseDto)
