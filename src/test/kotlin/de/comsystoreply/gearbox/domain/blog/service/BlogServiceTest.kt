@@ -3,6 +3,7 @@ package de.comsystoreply.gearbox.domain.blog.service
 import de.comsystoreply.gearbox.domain.blog.model.Blog
 import de.comsystoreply.gearbox.domain.blog.model.BlogCategory
 import de.comsystoreply.gearbox.domain.blog.port.persistance.BlogRepository
+import de.comsystoreply.gearbox.domain.blog.port.persistance.CommentRepository
 import de.comsystoreply.gearbox.domain.user.port.persistance.UserRepository
 import io.mockk.every
 import io.mockk.mockk
@@ -23,6 +24,7 @@ class BlogServiceTest {
 
     private lateinit var blogRepository: BlogRepository
     private lateinit var userRepository: UserRepository
+    private lateinit var commentRepository: CommentRepository
     private lateinit var blogService: BlogService
 
     private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss+00")
@@ -71,7 +73,8 @@ class BlogServiceTest {
     fun setUp() {
         blogRepository = mockk()
         userRepository = mockk()
-        blogService = BlogService(blogRepository, userRepository)
+        commentRepository = mockk()
+        blogService = BlogService(blogRepository, userRepository, commentRepository)
     }
 
     @Test
