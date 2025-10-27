@@ -21,7 +21,7 @@ class GlobalExceptionHandler {
         return ResponseEntity(exceptionMessage, HttpStatus.NOT_FOUND)
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(UserException::class)
     fun handleAuthenticationException(ex: UserException): ResponseEntity<ExceptionMessage> {
         val exceptionMessage = ExceptionMessage(
             message = ex.message,
@@ -29,7 +29,7 @@ class GlobalExceptionHandler {
         return ResponseEntity(exceptionMessage, HttpStatus.BAD_REQUEST)
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(BlogException::class)
     fun handleBlogExceptions(ex: BlogException): ResponseEntity<ExceptionMessage> {
         val exceptionMessage = ExceptionMessage(
             message = ex.message,
