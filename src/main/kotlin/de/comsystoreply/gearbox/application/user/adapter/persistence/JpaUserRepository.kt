@@ -31,7 +31,11 @@ class JpaUserRepository(
     }
 
     override fun findById(id: String): User? {
-        return jpaUserEntityRepository.findById(id)?.toDomain()
+        return jpaUserEntityRepository.findById(id).get().toDomain()
+    }
+
+    override fun findAllById(userIds: Collection<String>): List<User> {
+        return jpaUserEntityRepository.findAllById(userIds).map { it.toDomain() }
     }
 
     override fun search(query: String, pageable: Pageable): Page<User> {
@@ -52,9 +56,8 @@ class JpaUserRepository(
     }
 }
 
-interface JpaUserEntityRepository : JpaRepository<UserEntity, Long> {
+interface JpaUserEntityRepository : JpaRepository<UserEntity, String> {
     fun findByEmail(email: String): UserEntity?
     fun findByUsername(username: String): UserEntity?
-    fun findById(id: String): UserEntity?
     fun findAllByUsernameContainingIgnoreCase(username: String, pageable: Pageable): Page<UserEntity>
 }

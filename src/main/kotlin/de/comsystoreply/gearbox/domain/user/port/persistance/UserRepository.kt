@@ -35,6 +35,12 @@ interface UserRepository {
     fun findById(id: String): User?
 
     /**
+     * @property [userIds] list of user ids
+     * @return returns list of [User] domain objects
+     */
+    fun findAllById(userIds: Collection<String>): List<User>
+
+    /**
      * @property [query] search criteria, simple string
      * @property [pageable] defines which page and size should return
      * @return Pageable list of User objects whose usernames match the search criteria

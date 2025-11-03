@@ -77,4 +77,10 @@ final class BlogService(
 
         return commentRepository.findAllByBlogId(blogId, Pageable.ofSize(6))
     }
+
+    override fun findBlogComments(blogId: String, pageable: Pageable): Page<Comment> {
+        blogRepository.findById(blogId) ?: throw BlogNotFoundException("Blog is not found.")
+
+        return commentRepository.findAllByBlogId(blogId, pageable)
+    }
 }

@@ -1,10 +1,6 @@
 package de.comsystoreply.gearbox.bff.adapter.web
 
-import de.comsystoreply.gearbox.application.blog.port.web.BlogResponseDto
-import de.comsystoreply.gearbox.application.blog.port.web.BlogWebFacade
-import de.comsystoreply.gearbox.application.blog.port.web.CommentRequestDto
-import de.comsystoreply.gearbox.application.blog.port.web.CommentResponseDto
-import de.comsystoreply.gearbox.application.blog.port.web.LikeRequestDto
+import de.comsystoreply.gearbox.application.blog.port.web.*
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.http.HttpStatus
@@ -72,6 +68,17 @@ final class BlogController(
     @PostMapping("/comment")
     final fun makeComment(@RequestBody commentRequestDto: CommentRequestDto): ResponseEntity<Page<CommentResponseDto>> {
         val response = webFacade.makeComment(commentRequestDto)
+        return ResponseEntity(response, HttpStatus.OK)
+    }
+
+    @GetMapping("/comment/{id}/{page}/{size}")
+    final fun findCommentsForBlog(
+        @PathVariable id: String,
+        @PathVariable page: Int,
+        @PathVariable size: Int
+    ): ResponseEntity<Page<CommentResponseDto>> {
+        val pageRequest = PageRequest.of(page, size)
+        val response = webFacade.findCommentsForBlog(id, pageRequest)
         return ResponseEntity(response, HttpStatus.OK)
     }
 }

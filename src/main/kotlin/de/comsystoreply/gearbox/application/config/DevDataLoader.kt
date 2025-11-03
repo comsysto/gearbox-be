@@ -1,8 +1,10 @@
 package de.comsystoreply.gearbox.application.config
 
 import de.comsystoreply.gearbox.application.blog.adapter.persistance.JpaBlogEntityRepository
+import de.comsystoreply.gearbox.application.blog.adapter.persistance.JpaCommentEntityRepository
 import de.comsystoreply.gearbox.application.blog.model.BlogCategoryEntity
 import de.comsystoreply.gearbox.application.blog.model.BlogEntity
+import de.comsystoreply.gearbox.application.blog.model.CommentEntity
 import de.comsystoreply.gearbox.domain.user.port.api.UserApiFacade
 import de.comsystoreply.gearbox.domain.user.port.api.UserInputDetails
 import org.springframework.boot.CommandLineRunner
@@ -15,18 +17,19 @@ import java.util.*
 @Profile("dev")
 final class DevDataLoader(
     private val userApiFacade: UserApiFacade,
-    private val blogRepository: JpaBlogEntityRepository
+    private val blogRepository: JpaBlogEntityRepository,
+    private val commentRepository: JpaCommentEntityRepository,
 ) : CommandLineRunner {
     override fun run(vararg args: String?) {
         //************************* User models *************************//
-        val filipDetails = UserInputDetails("filip@kisic.com", "filipkisic", "Pa$\$w0rd", "Pa$\$w0rd", null)
-        val jeremyDetails = UserInputDetails("jeremy@clarkson.com", "jeremyclarkson", "Pa$\$w0rd", "Pa$\$w0rd", null)
-        val slashDetails = UserInputDetails("saul@hudson.com", "slash", "Pa$\$w0rd", "Pa$\$w0rd", null)
+        val filipDetails = UserInputDetails("filip@kisic.com", "filipkisic", "Pa$\$w0rd", "Pa$\$w0rd", "https://miro.medium.com/v2/resize:fit:2400/1*2SIPj48IYssM-7tEAICRUQ.jpeg")
+        val jeremyDetails = UserInputDetails("jeremy@clarkson.com", "jeremyclarkson", "Pa$\$w0rd", "Pa$\$w0rd", "https://globalnews.ca/wp-content/uploads/2019/11/grandtours4.png")
+        val slashDetails = UserInputDetails("saul@hudson.com", "slash", "Pa$\$w0rd", "Pa$\$w0rd", "https://images.jazelc.com/uploads/galpinastonmartin-m2e/Blogs-Slash_At_GalpinAstonMartin1.jpg")
 
         //************************* User registration process *************************//
         val filipUser = userApiFacade.signUp(filipDetails)
         val jeremyUser = userApiFacade.signUp(jeremyDetails)
-        userApiFacade.signUp(slashDetails)
+        val slashUser = userApiFacade.signUp(slashDetails)
 
         //************************* Blog models *************************//
         val mercedesV12Blog = BlogEntity(
@@ -66,5 +69,127 @@ final class DevDataLoader(
         blogRepository.save(mercedesV12Blog)
         blogRepository.save(audiGearboxBlog)
         blogRepository.save(newApolloBlog)
+
+        //************************* Blog comments ************************* //
+        val mercedesSlashComment = CommentEntity(
+            UUID.randomUUID().toString(),
+            mercedesV12Blog.id,
+            slashUser.id,
+            "Glad to hear that V12 engines will stay with us for some time, such a joy to drive."
+        )
+
+        val mercedesJeremyComment = CommentEntity(
+            UUID.randomUUID().toString(),
+            mercedesV12Blog.id,
+            jeremyUser.id,
+            "Drove this car multiple times, what a piece of engineering..."
+        )
+
+        val mercedesJeremyCommentSecond = CommentEntity(
+            UUID.randomUUID().toString(),
+            mercedesV12Blog.id,
+            jeremyUser.id,
+            "All mighty S65 ///AMG with 612hp and over 1000Nm, what a beast. Gotta buy one. "
+        )
+
+        val mercedesJeremyCommentThird = CommentEntity(
+            UUID.randomUUID().toString(),
+            mercedesV12Blog.id,
+            jeremyUser.id,
+            "It sends me the shivers down my spine when I remember that sound."
+        )
+
+        val mercedesJeremyCommentFourth = CommentEntity(
+            UUID.randomUUID().toString(),
+            mercedesV12Blog.id,
+            jeremyUser.id,
+            "Richard and Captain Slow admired how luxuriously that power was wrapped."
+        )
+
+        val mercedesJeremyCommentFifth = CommentEntity(
+            UUID.randomUUID().toString(),
+            mercedesV12Blog.id,
+            jeremyUser.id,
+            "Beauty and the Beast in a single car, power in a tuxedo."
+        )
+
+        val mercedesSlashCommentSecond = CommentEntity(
+            UUID.randomUUID().toString(),
+            mercedesV12Blog.id,
+            slashUser.id,
+            "Wow Jeremy, you really love this car."
+        )
+
+        val mercedesJeremyCommentSixth = CommentEntity(
+            UUID.randomUUID().toString(),
+            mercedesV12Blog.id,
+            jeremyUser.id,
+            "Image having the power and performance from Aston Martin while having your back massaged and ventilated at the same time..."
+        )
+
+        val mercedesJeremyCommentSeventh = CommentEntity(
+            UUID.randomUUID().toString(),
+            mercedesV12Blog.id,
+            jeremyUser.id,
+            "After 30 minutes of driving the Ferrari at 250km/h your back and ears will hurt. In Merc you can whisper."
+        )
+
+        val mercedesJeremyCommentEight = CommentEntity(
+            UUID.randomUUID().toString(),
+            mercedesV12Blog.id,
+            jeremyUser.id,
+            "I gotta buy one actually, nothing will replace the CLK 63 AMG Black Series, but this is different type of car."
+        )
+
+        val mercedesSlashCommentNinth = CommentEntity(
+            UUID.randomUUID().toString(),
+            mercedesV12Blog.id,
+            slashUser.id,
+            "I will consider one for myself, cheers iii];)"
+        )
+
+        val mercedesJeremyCommentTenth = CommentEntity(
+            UUID.randomUUID().toString(),
+            mercedesV12Blog.id,
+            jeremyUser.id,
+            "You won't be sorry."
+        )
+
+        val mercedesJeremyCommentEleventh = CommentEntity(
+            UUID.randomUUID().toString(),
+            mercedesV12Blog.id,
+            jeremyUser.id,
+            "Just ordered one, the final edition."
+        )
+
+        val mercedesSlashCommentTwelfth = CommentEntity(
+            UUID.randomUUID().toString(),
+            mercedesV12Blog.id,
+            slashUser.id,
+            "Congrats man! iii];)"
+        )
+
+        val mercedesJeremyCommentThirteenth = CommentEntity(
+            UUID.randomUUID().toString(),
+            mercedesV12Blog.id,
+            jeremyUser.id,
+            "Thanks Slash!"
+        )
+
+        commentRepository.save(mercedesSlashComment)
+        commentRepository.save(mercedesJeremyComment)
+        commentRepository.save(mercedesJeremyCommentSecond)
+        commentRepository.save(mercedesSlashCommentSecond)
+        commentRepository.save(mercedesJeremyCommentThird)
+        commentRepository.save(mercedesJeremyCommentFourth)
+        commentRepository.save(mercedesJeremyCommentFifth)
+        commentRepository.save(mercedesJeremyCommentSixth)
+        commentRepository.save(mercedesJeremyCommentSeventh)
+        commentRepository.save(mercedesJeremyCommentEight)
+        commentRepository.save(mercedesSlashCommentNinth)
+        commentRepository.save(mercedesJeremyCommentTenth)
+        commentRepository.save(mercedesJeremyCommentEleventh)
+        commentRepository.save(mercedesSlashCommentTwelfth)
+        commentRepository.save(mercedesJeremyCommentThirteenth)
     }
 }

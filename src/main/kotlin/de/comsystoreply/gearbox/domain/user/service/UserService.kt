@@ -24,6 +24,8 @@ class UserService(
     override fun findById(id: String): User =
         userRepository.findById(id) ?: throw UserNotFoundException("User is not found.")
 
+    override fun findAllById(userIds: Collection<String>): List<User> = userRepository.findAllById(userIds)
+
     override fun search(query: String, pageable: Pageable): Page<User> = userRepository.search(query, pageable)
 
     override fun signIn(details: UserInputDetails): User {

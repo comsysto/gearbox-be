@@ -36,7 +36,7 @@ class BlogControllerTest {
     fun `findTrending should return page of blog posts`() {
         val pageRequest = PageRequest.of(0, 10)
         val author = AuthorResponseDto("id", "username", "url")
-        val blogPost = BlogResponseDto("id", "title", "body", "url", LocalDateTime.now(), 0, "", author)
+        val blogPost = BlogResponseDto("id", "title", "body", "url", LocalDateTime.now(), 0,0, "", author)
         val expectedPage: Page<BlogResponseDto> = PageImpl(listOf(blogPost), pageRequest, 1)
 
         every { webFacade.findTrending(pageRequest) } returns expectedPage
@@ -72,7 +72,7 @@ class BlogControllerTest {
     fun `findLatest should return page of latest blog posts`() {
         val pageRequest = PageRequest.of(0, 10)
         val author = AuthorResponseDto("id", "username", "url")
-        val blogPost = BlogResponseDto("id", "title", "body", "url", LocalDateTime.now(), 0, "", author)
+        val blogPost = BlogResponseDto("id", "title", "body", "url", LocalDateTime.now(), 0, 0,"", author)
         val expectedPage: Page<BlogResponseDto> = PageImpl(listOf(blogPost), pageRequest, 1)
 
         every { webFacade.findLatest(pageRequest) } returns expectedPage
@@ -90,7 +90,7 @@ class BlogControllerTest {
         val userId = "id"
         val pageRequest = PageRequest.of(0, 10)
         val author = AuthorResponseDto(userId, "username", "url")
-        val blogPost = BlogResponseDto("id", "title", "body", "url", LocalDateTime.now(), 0, "", author)
+        val blogPost = BlogResponseDto("id", "title", "body", "url", LocalDateTime.now(), 0, 0,"", author)
         val expectedPage: Page<BlogResponseDto> = PageImpl(listOf(blogPost), pageRequest, 1)
 
         every { webFacade.findByAuthor(userId, pageRequest) } returns expectedPage
@@ -108,7 +108,7 @@ class BlogControllerTest {
         val userId = "id"
         val pageRequest = PageRequest.of(0, 10)
         val author = AuthorResponseDto(userId, "username", "url")
-        val blogPost = BlogResponseDto("id", "title", "body", "url", LocalDateTime.now(), 0, "", author)
+        val blogPost = BlogResponseDto("id", "title", "body", "url", LocalDateTime.now(), 0, 0,"", author)
         val expectedPage: Page<BlogResponseDto> = PageImpl(listOf(blogPost), pageRequest, 1)
 
         every { webFacade.findLikedBy(userId, pageRequest) } returns expectedPage
@@ -125,7 +125,7 @@ class BlogControllerTest {
         val query = "search term"
         val pageRequest = PageRequest.of(0, 10)
         val author = AuthorResponseDto("id", "username", "url")
-        val blogPost = BlogResponseDto("id", "title", "body", "url", LocalDateTime.now(), 0, "", author)
+        val blogPost = BlogResponseDto("id", "title", "body", "url", LocalDateTime.now(), 0, 0,"", author)
         val expectedPage: Page<BlogResponseDto> = PageImpl(listOf(blogPost), pageRequest, 1)
 
         every { webFacade.search(any(), any()) } returns expectedPage

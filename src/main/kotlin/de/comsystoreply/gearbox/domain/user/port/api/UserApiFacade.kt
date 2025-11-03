@@ -30,6 +30,11 @@ interface UserApiFacade {
      */
     fun findById(id: String): User
 
+    /**
+     * @property [userIds] list of user ids
+     * @return returns list of [User] domain objects
+     */
+    fun findAllById(userIds: Collection<String>): List<User>
 
     /**
      * @property [query] search criteria for users

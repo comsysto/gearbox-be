@@ -62,6 +62,13 @@ interface BlogApiFacade {
      * @return the pageable list of comments with the new comment
      */
     fun makeComment(blogId: String, userId: String, content: String): Page<Comment>
+
+    /**
+     * @property [blogId] blog unique identifier
+     * @property [pageable] defines page object that contains size and page
+     * @return the pageable list of comments for the requested blog
+     */
+    fun findBlogComments(blogId: String, pageable: Pageable): Page<Comment>
 }
 
 sealed class BlogException(message: String) : Exception(message)

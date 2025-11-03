@@ -284,7 +284,7 @@ class BlogServiceTest {
         every {
             blogRepository.updateLikeCount(
                 "0fcdbb1f-4fdc-4a47-9a18-c69f339b589b",
-                ++blog1.numberOfLikes
+                18
             )
         } returns Unit
 
